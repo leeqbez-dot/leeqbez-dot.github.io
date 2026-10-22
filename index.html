@@ -1,0 +1,730 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>JPEGODD — монтаж и дизайн</title>
+<meta name="description" content="Монтаж подкастов, лекций и рилсов, обложки и постеры. Владимир Гладышков, JPEGODD.">
+<meta property="og:title" content="JPEGODD — монтаж и дизайн">
+<meta property="og:description" content="Монтаж подкастов, лекций и рилсов, обложки и постеры.">
+<meta property="og:image" content="media/hero-nachinayu.jpg">
+<meta name="theme-color" content="#0B0B0D">
+</head>
+<body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Sans+Extra+Condensed:wght@500;800;900&family=IBM+Plex+Mono:wght@400;500&family=Onest:wght@400;500;700&display=swap">
+<style>
+/* Layout: портфолио монтажёра. Сверху стол-коллаж: кадры и бумажки, которые можно таскать. Ниже визитка слева (липкая) и лента справа: обо мне, работы-папки, цены, отзывы, вопросы, бриф. Тёмный намеренно, одна тема, один яркий цвет: синий. */
+:root{
+  color-scheme:dark;
+  --ink:#0B0B0D; --ink2:#141418; --line:#272830; --fg:#F0F0EC; --soft:#C6C7CC; --muted:#8A8B93;
+  --paper:#ECEAE3; --on-paper:#111114;
+  --acc:#2F55FF; --on-acc:#FFFFFF; --acc-t:#7F9CFF;
+  --f-disp:"Fira Sans Extra Condensed","Arial Narrow","Roboto Condensed",Impact,sans-serif;
+  --f-body:"Onest",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{background:var(--ink);color:var(--fg);font-family:var(--f-body);font-size:17px;line-height:1.55;margin:0;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--ink)}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--acc-t);outline-offset:3px}
+p{margin:0}
+h1,h2,h3{margin:0;font-weight:800;text-wrap:balance}
+.mono{font-family:var(--f-mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+.tnum{font-variant-numeric:tabular-nums}
+.gut{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+.grain{position:fixed;inset:0;pointer-events:none;z-index:70;opacity:.08;mix-blend-mode:screen;background-size:180px 180px}
+@media (prefers-reduced-motion:no-preference){.grain{animation:grain .5s steps(4) infinite}}
+@keyframes grain{0%{background-position:0 0}25%{background-position:-60px 40px}50%{background-position:30px -70px}75%{background-position:-90px -20px}100%{background-position:0 0}}
+
+.tag{display:inline-block;background:var(--fg);color:var(--ink);font-family:var(--f-disp);font-weight:500;font-size:15px;line-height:1;text-transform:uppercase;letter-spacing:.01em;padding:3px 5px 2px;text-decoration:none}
+
+/* навигация */
+.nav{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding-top:12px;pointer-events:none}
+.nav>*{pointer-events:auto}
+.nav .links{display:flex;gap:2px;flex-wrap:wrap;justify-content:center}
+.nav .links a:hover,.nav .links a:focus-visible{background:var(--acc);color:var(--on-acc)}
+.nav .brand{font-weight:800}
+.nav .rec{background:var(--ink);color:var(--fg);display:flex;align-items:center;gap:6px}
+.nav .rec i{width:8px;height:8px;border-radius:50%;background:var(--acc)}
+@media (prefers-reduced-motion:no-preference){.nav .rec i{animation:blink 1s steps(2) infinite}}
+@keyframes blink{50%{opacity:0}}
+@media (max-width:700px){.nav .rec,.nav .brand{display:none}.nav{justify-content:center}}
+
+/* герой: стол с коллажем, фон статичный */
+.hero{position:relative;height:clamp(600px,92vh,940px);overflow:hidden;background:
+  linear-gradient(var(--line) 1px,transparent 1px) 0 0/48px 48px,
+  linear-gradient(90deg,var(--line) 1px,transparent 1px) 0 0/48px 48px,var(--ink);
+  background-blend-mode:normal}
+.hero::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 60% 40%,transparent 30%,var(--ink) 85%);pointer-events:none}
+.hero .say{position:absolute;left:max(16px,env(safe-area-inset-left,0px));top:calc(64px + env(safe-area-inset-top,0px));display:flex;flex-direction:column;align-items:flex-start;gap:3px;z-index:30;max-width:calc(100% - 32px);pointer-events:none}
+.hero .say .tag{font-size:clamp(26px,4.4vw,58px);font-weight:800;padding:2px 8px 0}
+.hero .say .sub{margin-top:12px;font-size:15px;text-transform:none;font-family:var(--f-body);font-weight:500;line-height:1.35;padding:6px 8px;max-width:32ch;background:var(--ink);color:var(--fg);border:1px solid var(--line)}
+.hint{position:absolute;right:max(16px,env(safe-area-inset-right,0px));top:calc(64px + env(safe-area-inset-top,0px));z-index:30;display:flex;gap:8px;align-items:center;font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--acc-t);pointer-events:none}
+.hint svg{width:22px;height:22px}
+.hint span{display:block;color:var(--muted)}
+.hero .word{position:absolute;left:0;right:0;bottom:-1.2vw;z-index:1;pointer-events:none}
+.hero .word svg{display:block;width:100%;height:auto}
+.hero .word text{font-family:var(--f-disp);font-weight:900;fill:var(--acc)}
+@media (max-width:700px){.hint{top:auto;bottom:calc(30vw + 10px);right:auto;left:max(16px,env(safe-area-inset-left,0px))}}
+
+.scrap{position:absolute;left:var(--x);top:var(--y);transform:rotate(var(--r,0deg));z-index:10;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;transition:box-shadow .2s}
+.scrap.drag{cursor:grabbing;box-shadow:12px 16px 0 rgba(0,0,0,.45)}
+.scrap.ph{background:var(--paper);padding:8px 8px 26px}
+.scrap.ph canvas{display:block;width:100%;height:100%}
+.scrap.ph .cv{position:relative;width:var(--w);aspect-ratio:var(--ar);max-width:100%;overflow:hidden;background:#111}
+.scrap.ph b{position:absolute;left:10px;bottom:5px;font-family:var(--f-mono);font-weight:500;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--on-paper)}
+.scrap.ph .q{position:absolute;right:10px;bottom:5px;font-family:var(--f-mono);font-size:10.5px;color:var(--acc)}
+.scrap .tape{position:absolute;top:-10px;left:50%;width:70px;height:20px;margin-left:-35px;background:rgba(236,234,227,.55);transform:rotate(-4deg)}
+.scrap.strip{background:var(--acc);color:var(--on-acc);padding:10px 12px;width:var(--w);overflow:hidden}
+.scrap.strip p{font-family:var(--f-disp);font-weight:900;font-size:clamp(18px,2vw,28px);line-height:1.05;text-transform:uppercase;white-space:nowrap}
+.scrap.strip p:nth-child(2n){margin-left:-18%}
+.scrap.stk{background:var(--fg);color:var(--ink);font-family:var(--f-disp);font-weight:800;font-size:clamp(17px,1.7vw,24px);text-transform:uppercase;line-height:1;padding:7px 10px}
+.scrap.ticket{background:var(--paper);color:var(--on-paper);padding:12px 14px;font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;line-height:1.5;clip-path:polygon(0 0,100% 0,100% 40%,96% 50%,100% 60%,100% 100%,0 100%,0 60%,4% 50%,0 40%)}
+.scrap.ticket b{display:block;font-family:var(--f-disp);font-weight:900;font-size:26px;letter-spacing:0;line-height:1;color:var(--acc)}
+@media (max-width:700px){
+  .scrap.m-hide{display:none}
+  .hero .scrap.m1{--x:3%!important;--y:42%!important;--w:110px!important}
+  .hero .scrap.m2{--x:68%!important;--y:38%!important;--w:96px!important}
+  .hero .scrap.m3{--x:36%!important;--y:52%!important;--w:130px!important}
+  .hero .scrap.m4{--x:44%!important;--y:35%!important;font-size:15px}
+}
+
+.run{background:var(--acc);color:var(--on-acc);font-family:var(--f-disp);font-weight:800;text-transform:uppercase;font-size:clamp(20px,2.6vw,32px);white-space:nowrap;overflow:hidden;padding-block:8px;line-height:1;position:relative;z-index:2}
+.run div{display:inline-block}
+@media (prefers-reduced-motion:no-preference){.run div{animation:run 28s linear infinite}}
+@keyframes run{to{transform:translateX(-50%)}}
+
+/* разворот */
+.page{max-width:1480px;margin:0 auto;display:grid;grid-template-columns:300px minmax(0,1fr);gap:clamp(24px,4vw,64px);padding-block:48px 0}
+@media (max-width:900px){.page{grid-template-columns:minmax(0,1fr)}}
+.card{position:sticky;top:calc(56px + env(safe-area-inset-top,0px));align-self:start;background:var(--paper);color:var(--on-paper);padding:16px;font-family:var(--f-mono);font-size:11.5px;line-height:1.45;transform:rotate(-1deg);box-shadow:6px 6px 0 var(--acc)}
+@media (max-width:900px){.card{position:relative;top:0;transform:none;max-width:420px}}
+.card .row{display:flex;justify-content:space-between;text-transform:uppercase;letter-spacing:.06em;font-size:10px}
+.card .name{font-family:var(--f-disp);font-weight:800;font-size:30px;line-height:.95;text-transform:uppercase;margin-top:14px}
+.card .role{color:#55565c;margin-top:4px}
+.card dl{display:grid;grid-template-columns:1fr 1fr;gap:12px 10px;margin:16px 0 0}
+.card dt{text-transform:uppercase;letter-spacing:.06em;font-size:10px;color:#66676d}
+.card dd{margin:0}
+.card .frame{margin-top:16px;aspect-ratio:4/5;max-width:100%;background:#1a1a1c;position:relative;overflow:hidden}
+.card .frame img{width:100%;height:100%;display:block;object-fit:cover;object-position:50% 35%;filter:grayscale(.15) contrast(1.05)}
+.card .frame .scratch{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Ccircle cx='16' cy='16' r='13' fill='%23d4af37' stroke='%23826a1c' stroke-width='2'/%3E%3Ccircle cx='16' cy='16' r='8' fill='none' stroke='%23826a1c' stroke-width='1.5'/%3E%3C/svg%3E") 16 16,crosshair;transition:opacity .6s;z-index:3}
+.card .frame .shine{position:absolute;inset:0;z-index:4;pointer-events:none;opacity:0;background:linear-gradient(110deg,transparent 38%,rgba(255,255,255,.55) 46%,rgba(255,255,255,.95) 50%,rgba(255,255,255,.55) 54%,transparent 62%) no-repeat;background-size:250% 100%;background-position:130% 0}
+@media (prefers-reduced-motion:no-preference){.card .frame .shine.go{animation:shine 1.2s cubic-bezier(.4,0,.2,1) .45s 2 both}}
+@keyframes shine{0%{opacity:1;background-position:130% 0}100%{opacity:1;background-position:-30% 0}}
+.card .frame span{z-index:2;position:absolute;left:6px;bottom:6px;background:var(--paper);padding:1px 4px;font-size:10px;letter-spacing:.06em;text-transform:uppercase}
+.card canvas.bar{display:block;width:100%;height:46px;margin-top:16px}
+.card .barcap{text-align:center;letter-spacing:.2em;margin-top:2px}
+.card .acts{display:flex;justify-content:space-between;margin-top:14px;text-transform:uppercase;letter-spacing:.06em;font-size:10.5px;gap:8px;flex-wrap:wrap}
+.card .acts a{text-decoration:none;border-bottom:1px solid currentColor}
+.card .acts a:hover{background:var(--acc);color:var(--on-acc)}
+
+.feed{min-width:0;display:flex;flex-direction:column;gap:clamp(72px,9vw,128px)}
+.feed>section{scroll-margin-top:72px}
+.head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:22px}
+.head h2{font-family:var(--f-disp);font-weight:900;text-transform:uppercase;font-size:clamp(44px,7vw,104px);line-height:.86}
+.head .mono{color:var(--muted)}
+.lead{font-size:clamp(24px,2.8vw,38px);line-height:1.18;font-weight:500;max-width:24ch;letter-spacing:-.01em}
+.lead em{font-style:normal;background:var(--acc);color:var(--on-acc);padding:0 .12em}
+.cap{color:var(--soft);max-width:60ch}
+
+/* обо мне */
+.about{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:28px;align-items:stretch}
+.about-txt{display:grid;gap:14px;color:var(--soft);max-width:60ch;align-content:start;font-size:clamp(18px,1.6vw,21px)}
+.about-txt b{color:var(--fg);font-weight:500}
+.tools{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.quote{background:var(--acc);color:var(--on-acc);padding:22px;display:grid;gap:18px;align-content:space-between;transform:rotate(1deg)}
+.quote p{font-family:var(--f-disp);font-weight:900;text-transform:uppercase;font-size:clamp(30px,4vw,56px);line-height:.92}
+.quote p span{color:var(--ink)}
+.quote ul{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+@media (max-width:760px){.about,.quote{grid-template-columns:minmax(0,1fr)}}
+
+/* работы: шоурил и папки */
+.reel{position:relative;aspect-ratio:16/9;max-width:100%;background:#000;overflow:hidden;border:1px solid var(--line)}
+.reel canvas,.reel video{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover}
+.reel .play{position:absolute;left:50%;top:50%;width:clamp(72px,9vw,120px);aspect-ratio:1;margin:calc(clamp(72px,9vw,120px)/-2) 0 0 calc(clamp(72px,9vw,120px)/-2);border-radius:50%;background:var(--acc);display:grid;place-items:center}
+.reel .play::after{content:"";border-left:clamp(22px,2.6vw,34px) solid var(--on-acc);border-top:clamp(14px,1.6vw,21px) solid transparent;border-bottom:clamp(14px,1.6vw,21px) solid transparent;margin-left:8%}
+.reel .lbl{position:absolute;left:12px;right:12px;top:10px;display:flex;justify-content:space-between;gap:8px;font-family:var(--f-disp);font-weight:800;text-transform:uppercase;font-size:clamp(18px,2vw,28px);line-height:1;color:var(--fg)}
+.reel .bt{position:absolute;left:12px;right:12px;bottom:10px;display:flex;justify-content:space-between;gap:8px;font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+.reel .bt b{background:var(--ink);padding:2px 5px;font-weight:500}
+.reel .bt b.soon{background:var(--acc);color:var(--on-acc)}
+
+.folders{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-top:22px}
+@media (max-width:760px){.folders{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.fold{background:none;border:0;padding:8px 4px;color:var(--fg);font:inherit;cursor:pointer;display:grid;justify-items:center;gap:8px;text-align:center}
+.fold .ic{position:relative;width:100%;max-width:120px;aspect-ratio:1.3;margin-top:10px}
+.fold .ic::before{content:"";position:absolute;left:0;top:-10px;width:42%;height:22px;background:var(--acc);border-radius:4px 10px 0 0;filter:brightness(.8)}
+.fold .ic::after{content:"";position:absolute;inset:0;background:var(--acc);border-radius:2px 4px 4px 4px;box-shadow:inset 0 10px 0 rgba(255,255,255,.12)}
+.fold .ic i{position:absolute;z-index:1;left:12%;right:12%;top:8%;height:30%;background:var(--paper);transform:rotate(-3deg);transition:transform .2s}
+.fold:hover .ic i,.fold[aria-expanded=true] .ic i{transform:translateY(-14px) rotate(-6deg)}
+.fold .nm{font-family:var(--f-disp);font-weight:800;text-transform:uppercase;font-size:clamp(18px,1.8vw,24px);line-height:1;padding:2px 6px}
+.fold[aria-expanded=true] .nm{background:var(--acc);color:var(--on-acc)}
+.fold .ct{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+
+.win{margin-top:14px;border:1px solid var(--soft);background:var(--ink2)}
+.win .bar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 12px;border-bottom:1px solid var(--line);font-family:var(--f-mono);font-size:12px;letter-spacing:.04em}
+.win .bar button{background:none;border:1px solid var(--line);color:var(--fg);font:inherit;cursor:pointer;padding:2px 8px}
+.win .bar button:hover{border-color:var(--acc-t)}
+.files{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;padding:16px}
+.file{display:grid;gap:6px;min-width:0}
+.file .th{position:relative;aspect-ratio:var(--ar);max-width:100%;background:#111;overflow:hidden}
+.file .th canvas{width:100%;height:100%;display:block}
+.file .fn{font-family:var(--f-mono);font-size:11px;color:var(--soft);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.file .fn span{color:var(--acc-t)}
+
+/* постеры: настоящие файлы и просмотр */
+.file .th.zoom{display:block;width:100%;padding:0;border:0;cursor:zoom-in;background:#111}
+.file .th.zoom img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s}
+.file .th.zoom:hover img{transform:scale(1.04)}
+.lb{position:fixed;inset:0;z-index:85;background:rgba(5,5,8,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:zoom-out;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.lb img,.lb video{max-width:100%;max-height:calc(100vh - 80px);box-shadow:10px 10px 0 var(--acc);background:#000;cursor:default}
+.file .th.vid::after{content:"";position:absolute;left:50%;top:50%;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;background:var(--acc) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 7l9 5-9 5z' fill='white'/%3E%3C/svg%3E") center/60% no-repeat}
+.file .th.zoom{position:relative}
+.lb .mono{color:var(--muted)}
+
+/* цены за штуку: ровный список */
+.plist{margin-top:-22px}
+.pr{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1.6fr) 72px minmax(0,.9fr);gap:24px;align-items:baseline;padding-block:20px;border-bottom:1px solid var(--line)}
+.pr h3{font-family:var(--f-disp);font-weight:800;text-transform:uppercase;font-size:clamp(22px,2.1vw,32px);line-height:1;white-space:nowrap}
+@media (max-width:760px){.pr h3{white-space:normal}}
+.pr:hover h3{color:var(--acc-t)}
+.pr p{color:var(--soft);font-size:15px;line-height:1.45}
+.pr .t{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.pr .v{font-family:var(--f-disp);font-weight:800;font-size:clamp(26px,2.4vw,32px);line-height:1;text-align:right;white-space:nowrap}
+.pr .v small{display:block;font-family:var(--f-mono);font-weight:400;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+@media (max-width:760px){
+  .pr{grid-template-columns:minmax(0,1fr) auto;gap:8px 16px}
+  .pr .v{grid-column:2;grid-row:1}
+  .pr p,.pr .t{grid-column:1/-1}
+}
+.terms{display:flex;flex-wrap:wrap;gap:4px;margin-top:12px}
+.terms .tag{background:var(--ink2);color:var(--soft);border:1px solid var(--line);font-family:var(--f-mono);font-size:11px;letter-spacing:.04em;padding:5px 7px}
+.note{margin-top:12px;color:var(--muted);font-size:14px;max-width:60ch}
+
+/* отзывы */
+.revs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (max-width:900px){.revs{grid-template-columns:minmax(0,1fr)}}
+.rev{border:1px dashed var(--line);padding:16px;display:grid;gap:12px;align-content:start}
+.rev .who{display:flex;gap:10px;align-items:center}
+.rev .av{width:38px;height:38px;border-radius:50%;background:var(--ink2);border:1px solid var(--line);flex:none}
+.rev .who b{display:block;font-weight:500}
+.rev .who span{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.rev .bub{background:var(--ink2);border-radius:14px 14px 14px 4px;padding:12px 14px;display:grid;gap:7px}
+.rev .bub i{display:block;height:9px;border-radius:5px;background:var(--line)}
+.rev .bub i:nth-child(2){width:86%}.rev .bub i:nth-child(3){width:62%}
+.rev .soon{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--acc-t)}
+.rtabs{display:flex;gap:6px;margin-bottom:14px}
+.rtabs button{font:inherit;font-family:var(--f-disp);font-weight:700;font-size:20px;text-transform:uppercase;letter-spacing:.01em;padding:6px 16px;border:1px solid var(--line);background:transparent;color:inherit;cursor:pointer}
+.rtabs button[aria-selected="true"]{background:var(--acc);border-color:var(--acc);color:var(--on-acc)}
+.rtabs button:focus-visible{outline:2px solid var(--acc-t);outline-offset:2px}
+
+/* вопросы */
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;gap:16px;padding-block:16px;font-weight:500;font-size:18px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-family:var(--f-disp);font-weight:800;font-size:26px;line-height:1;color:var(--acc-t);transition:transform .2s}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq details p{padding-bottom:18px;color:var(--soft);max-width:62ch}
+
+/* бриф */
+.case{border:1px solid var(--fg);background:var(--ink2)}
+.case .top{display:grid;grid-template-columns:minmax(0,1.3fr) repeat(3,minmax(0,1fr));border-bottom:1px solid var(--fg)}
+.case .top>div{padding:12px 14px;border-left:1px solid var(--line)}
+.case .top>div:first-child{border-left:0}
+.case .top .k{font-family:var(--f-mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.case .top .v{font-family:var(--f-disp);font-weight:800;font-size:26px;line-height:1.1}
+.case .top .v.ok{color:var(--acc-t)}
+.prog{height:6px;background:var(--line);margin-top:8px;position:relative}
+.prog i{position:absolute;inset:0 auto 0 0;width:0;background:repeating-linear-gradient(90deg,var(--acc) 0 8px,transparent 8px 10px);transition:width .3s}
+@media (max-width:620px){.case .top{grid-template-columns:repeat(3,minmax(0,1fr))}.case .top>div:first-child{grid-column:1/-1;border-bottom:1px solid var(--line)}.case .top>div:nth-child(2){border-left:0}}
+form{display:grid;gap:20px;padding:22px}
+.f2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px}
+@media (max-width:620px){.f2{grid-template-columns:minmax(0,1fr)}}
+.fld{display:grid;gap:8px;min-width:0}
+.fld>label,.fld legend{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--soft);padding:0}
+fieldset{border:0;margin:0;padding:0;min-width:0}
+fieldset.fld legend{margin-bottom:8px}
+input[type=text]{width:100%;font:inherit;font-size:16px;color:var(--fg);background:var(--ink);border:1px solid var(--line);border-radius:0;padding:12px}
+input[type=text]:focus{border-color:var(--acc-t);outline:none}
+input[aria-invalid=true]{border-color:var(--acc-t)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips label{position:relative;cursor:pointer}
+.chips input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.chips span{display:inline-block;padding:8px 12px;border:1px solid var(--line);font-size:15px;background:var(--ink)}
+.chips input:checked+span{background:var(--acc);color:var(--on-acc);border-color:var(--acc)}
+.chips input:focus-visible+span{outline:2px solid var(--acc-t);outline-offset:2px}
+.agree{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--soft)}
+.agree input{margin-top:4px;accent-color:var(--acc);width:18px;height:18px;flex:none}
+.linkbtn{background:none;border:0;padding:0;font:inherit;color:var(--fg);text-decoration:underline;cursor:pointer}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:15px 22px;font-family:var(--f-disp);font-weight:800;text-transform:uppercase;font-size:22px;line-height:1;text-decoration:none;border:0;cursor:pointer;background:var(--acc);color:var(--on-acc);transition:transform .15s,box-shadow .15s}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--fg)}
+.err{color:var(--acc-t);font-size:14px}
+.out{border-top:1px solid var(--fg);padding:22px;display:grid;gap:12px}
+.out pre{margin:0;white-space:pre-wrap;font-family:var(--f-mono);font-size:13px;background:var(--ink);padding:14px;border:1px solid var(--line);overflow-x:auto}
+.contacts{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+
+footer{margin-top:clamp(80px,10vw,140px);border-top:1px solid var(--line)}
+footer .big{font-family:var(--f-disp);font-weight:900;text-transform:uppercase;line-height:.84;font-size:clamp(56px,13vw,220px);padding-block:20px 6px}
+footer .big a{text-decoration:none}
+footer .big a:hover{color:var(--acc-t)}
+footer .fine{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-block:12px 24px;color:var(--muted)}
+
+.modal{position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.75);display:flex;align-items:center;justify-content:center;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.modal .box{background:var(--paper);color:var(--on-paper);max-width:560px;padding:26px;display:grid;gap:12px;max-height:90vh;overflow:auto}
+.modal h3{font-family:var(--f-disp);font-weight:900;text-transform:uppercase;font-size:32px;line-height:.95}
+.modal .btn{justify-self:start}
+</style>
+
+<div class="grain" aria-hidden="true"></div>
+
+<nav class="nav gut" aria-label="Разделы">
+  <a class="tag brand" href="#top">JPEGODD®</a>
+  <div class="links">
+    <a class="tag" href="#about">Обо мне</a>
+    <a class="tag" href="#work">Работы</a>
+    <a class="tag" href="#price">Цены</a>
+    <a class="tag" href="#reviews">Отзывы</a>
+    <a class="tag" href="#faq">Вопросы</a>
+    <a class="tag" href="#brief">Бриф</a>
+  </div>
+  <span class="tag rec mono" aria-hidden="true"><i></i>REC</span>
+</nav>
+
+<header class="hero" id="top">
+  <div class="say">
+    <h1 style="display:contents"><span class="tag">Вижу, каким</span><span class="tag">может быть</span><span class="tag">ваш визуал</span></h1>
+  </div>
+  <div class="hint" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="7"/><path d="M12 1v6M12 17v6M1 12h6M17 12h6"/></svg>
+    <div>Потаскайте карточки<span>наведите, чтобы дожать качество</span></div>
+  </div>
+
+  <div class="scrap ph m1" style="--x:33%;--y:7%;--r:-4deg;--w:clamp(130px,13vw,200px);--ar:9/16" data-src="media/hero-nachinayu.jpg"><div class="tape"></div><div class="cv"></div><b>начинаю_заново.png</b><span class="q">Q 12%</span></div>
+  <div class="scrap ph m2" style="--x:63%;--y:7%;--r:5deg;--w:clamp(110px,11vw,180px);--ar:9/16" data-src="media/hero-hudeyu.jpg"><div class="tape"></div><div class="cv"></div><b>худею_заново.png</b></div>
+  <div class="scrap ph m-hide" style="--x:19.5%;--y:7%;--r:3deg;--w:clamp(140px,14vw,220px);--ar:3/4" data-src="media/hero-never.jpg"><div class="cv"></div><b>you_will_never.png</b></div>
+  <div class="scrap ph m3" style="--x:73%;--y:9.5%;--r:-2deg;--w:clamp(150px,15vw,240px);--ar:4/5" data-src="media/hero-slide1.mp4" data-poster="media/hero-slide1.jpg" data-video="1"><div class="tape"></div><div class="cv"></div><b>slide_1.mp4</b></div>
+  <div class="scrap strip m-hide" style="--x:40%;--y:9%;--r:-3deg;--w:clamp(260px,25vw,470px)" aria-hidden="true">
+    <p>Я делаю визуал!!!! Я делаю визуал!!!! Я делаю визуал!!!!</p>
+    <p>Я делаю визуал!!!! Я делаю визуал!!!! Я делаю визуал!!!!</p>
+    <p>Я делаю визуал!!!! Я делаю визуал!!!! Я делаю визуал!!!!</p>
+  </div>
+  <div class="scrap stk m4" style="--x:47%;--y:28%;--r:-3deg">На монтаже поправим</div>
+  <div class="scrap ticket m-hide" style="--x:79%;--y:81%;--r:4deg"><b>QUALITY 100%</b>сырой исходник<br>→ готовый визуал</div>
+
+  <div class="word" aria-hidden="true">
+    <svg viewBox="0 0 1000 250" preserveAspectRatio="xMidYMax meet"><text x="0" y="238" font-size="292" textLength="1000" lengthAdjust="spacingAndGlyphs">JPEGODD</text></svg>
+  </div>
+</header>
+
+<div class="run" aria-hidden="true"><div>ПОДКАСТЫ ■ ЛЕКЦИИ ■ РИЛСЫ ■ ОБЛОЖКИ ■ ПОСТЕРЫ ■ КОЛЛАЖИ ■ AI-ПРИКОЛЫ ■ ПОДКАСТЫ ■ ЛЕКЦИИ ■ РИЛСЫ ■ ОБЛОЖКИ ■ ПОСТЕРЫ ■ КОЛЛАЖИ ■ AI-ПРИКОЛЫ ■&nbsp;</div></div>
+
+<div class="page gut">
+  <aside class="card" aria-label="Визитка">
+    <div class="row"><span>Монтаж</span><span>Дизайн</span></div>
+    <p class="name">Владимир<br>Гладышков</p>
+    <p class="role">JPEGODD · монтажёр и дизайнер. Москва и удалённо.</p>
+    <dl>
+      <div><dt>Монтирую</dt><dd>Подкасты<br>Лекции<br>Рилсы</dd></div>
+      <div><dt>Рисую</dt><dd>Обложки<br>Постеры<br>Коллажи</dd></div>
+      <div><dt>Опыт работы</dt><dd class="tnum">6 лет</dd></div>
+      <div><dt>Работал с</dt><dd>EdTech<br>Блогерами<br>Экспертами</dd></div>
+    </dl>
+    <div class="frame"><img src="media/photo.jpg" alt="Владимир Гладышков в наушниках" width="560" height="747"><span>Владимир · JPEGODD</span><i class="shine" aria-hidden="true"></i><canvas class="scratch" tabindex="0" role="button" aria-label="Серебряный слой на фото. Сотрите его или нажмите Enter"></canvas></div>
+    <canvas class="bar" id="bar" aria-hidden="true"></canvas>
+    <p class="barcap">@JPEGODD</p>
+    <div class="acts">
+      <a href="https://t.me/JPEGODD" target="_blank" rel="noopener">Telegram ↗</a>
+      <a href="https://instagram.com/leeqbez" target="_blank" rel="noopener">Instagram ↗</a>
+      <a href="#brief">Бриф →</a>
+    </div>
+  </aside>
+
+  <main class="feed">
+    <section id="about">
+      <div class="head"><h2>Обо мне</h2><span class="mono">с 2012 года</span></div>
+      <div class="about">
+        <div class="about-txt">
+          <p>Меня зовут Владимир Гладышков. <b>14 лет в монтаже</b>, из них 6 за деньги, больше 1000 готовых видео.</p>
+          <p>Работаю с <b>авторами подкастов, онлайн-школами и экспертами</b>.</p>
+          <p>Люблю момент, когда монтаж, звук, обложка и шрифт складываются в одно целое. Поэтому сам делаю и дизайн, а в свободное время клею бумажные коллажи.</p>
+          <div class="tools"><span class="tag">Premiere Pro</span><span class="tag">After Effects</span><span class="tag">Photoshop</span><span class="tag">CapCut</span><span class="tag">AI-инструменты</span></div>
+        </div>
+        <div class="quote">
+        <p>Ваш проект — <span>мой проект</span></p>
+        <ul>
+          <li><span class="tag">Вкус и единый стиль</span></li>
+          <li><span class="tag">Включаюсь в смысл</span></li>
+          <li><span class="tag">Монтаж и дизайн в одних руках</span></li>
+        </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="work">
+      <div class="head"><h2>Работы</h2><span class="mono">шоурил и папки</span></div>
+      <!-- Когда будет шоурил: замените canvas и .play на <video controls playsinline src="reel.mp4"></video> (файл публикуется рядом со страницей). -->
+      <div class="reel" data-scene="road" data-seed="1" data-block="16">
+        <div class="lbl"><span>Шоурил 2026</span><span>0:45</span></div>
+        <div class="play" aria-hidden="true"></div>
+        <div class="bt"><b>16:9 · монтаж, цвет, графика</b><b class="soon">скоро</b></div>
+      </div>
+      <div class="folders" role="group" aria-label="Папки с работами">
+        <button class="fold" type="button" aria-expanded="false" aria-controls="win" data-f="reels"><span class="ic" aria-hidden="true"><i></i></span><span class="nm">Рилсы</span><span class="ct">6 файлов</span></button>
+        <button class="fold" type="button" aria-expanded="false" aria-controls="win" data-f="pods"><span class="ic" aria-hidden="true"><i></i></span><span class="nm">Подкасты</span><span class="ct">4 файла</span></button>
+        <button class="fold" type="button" aria-expanded="false" aria-controls="win" data-f="posters"><span class="ic" aria-hidden="true"><i></i></span><span class="nm">Постеры</span><span class="ct">4 файла</span></button>
+        <button class="fold" type="button" aria-expanded="false" aria-controls="win" data-f="collage"><span class="ic" aria-hidden="true"><i></i></span><span class="nm">Обложки</span><span class="ct">7 файлов</span></button>
+        <button class="fold" type="button" aria-expanded="false" aria-controls="win" data-f="ai"><span class="ic" aria-hidden="true"><i></i></span><span class="nm">AI</span><span class="ct">5 файлов</span></button>
+      </div>
+      <div class="win" id="win" hidden>
+        <div class="bar"><span id="win-path">~/JPEGODD/Рилсы</span><button type="button" id="win-close" aria-label="Закрыть папку">×</button></div>
+        <div class="files" id="files"></div>
+      </div>
+      <p class="cap" style="margin-top:14px">Откройте папку, ролики и постеры смотрятся крупно по клику. Где пока пусто, скоро появятся новые работы.</p>
+    </section>
+
+    <section id="price">
+      <div class="head"><h2>Цены</h2><span class="mono">цена за одну штуку</span></div>
+      <div class="plist">
+        <div class="pr"><h3>Лекция</h3><p>Паузы и оговорки убираем, «спикер + слайды», заставка, чистый звук.</p><span class="t">3 дня</span><div class="v tnum">от 6 000 ₽<small>до часа видео</small></div></div>
+        <div class="pr"><h3>Подкаст</h3><p>Монтаж выпуска, звук, цвет, заставка и обложка выпуска.</p><span class="t">5 дней</span><div class="v tnum">10–15 тыс ₽<small>выпуск до 1,5 часа</small></div></div>
+        <div class="pr"><h3>Рилс</h3><p>Сценарный монтаж, субтитры, обложка рилса.</p><span class="t">1–2 дня</span><div class="v tnum">от 1 500 ₽<small>вертикаль 9:16</small></div></div>
+        <div class="pr"><h3>Постер или обложка</h3><p>Обложка выпуска или рилса, постер, коллаж.</p><span class="t">1–2 дня</span><div class="v tnum">от 1 500 ₽<small>одна штука</small></div></div>
+      </div>
+      <div class="terms">
+        <span class="tag">2 круга правок включены</span><span class="tag">следующий круг 1 500 ₽</span><span class="tag">договор, ИП</span><span class="tag">предоплата 50%</span>
+      </div>
+      <p class="note">Точную сумму называю после брифа и до начала работы. Тестовых бесплатно не делаю.</p>
+    </section>
+
+    <section id="reviews">
+      <div class="head"><h2>Отзывы</h2><span class="mono">собираю</span></div>
+      <div class="rtabs" role="tablist" aria-label="Отзывы"><button type="button" role="tab" id="rt-v" aria-selected="true" aria-controls="rp-v">Видео</button><button type="button" role="tab" id="rt-d" aria-selected="false" aria-controls="rp-d" tabindex="-1">Дизайн</button></div>
+      <div class="revs" role="tabpanel" id="rp-v" aria-labelledby="rt-v">
+        <div class="rev"><div class="who"><span class="av"></span><div><b>Karpov Courses</b><span>онлайн-школа · лекции</span></div></div><div class="bub" aria-hidden="true"><i></i><i></i><i></i></div><span class="soon">отзыв скоро</span></div>
+        <div class="rev"><div class="who"><span class="av"></span><div><b>Автор подкаста</b><span>подкаст</span></div></div><div class="bub" aria-hidden="true"><i></i><i></i><i></i></div><span class="soon">отзыв скоро</span></div>
+        <div class="rev"><div class="who"><span class="av"></span><div><b>Эксперт</b><span>рилсы</span></div></div><div class="bub" aria-hidden="true"><i></i><i></i><i></i></div><span class="soon">отзыв скоро</span></div>
+      </div>
+      <div class="revs" role="tabpanel" id="rp-d" aria-labelledby="rt-d" hidden>
+        <div class="rev"><div class="who"><span class="av"></span><div><b>Автор подкаста</b><span>обложки</span></div></div><div class="bub" aria-hidden="true"><i></i><i></i><i></i></div><span class="soon">отзыв скоро</span></div>
+        <div class="rev"><div class="who"><span class="av"></span><div><b>Организатор лекций</b><span>афиша</span></div></div><div class="bub" aria-hidden="true"><i></i><i></i><i></i></div><span class="soon">отзыв скоро</span></div>
+        <div class="rev"><div class="who"><span class="av"></span><div><b>Блогер</b><span>обложки для видео</span></div></div><div class="bub" aria-hidden="true"><i></i><i></i><i></i></div><span class="soon">отзыв скоро</span></div>
+      </div>
+    </section>
+
+    <section id="faq" class="faq">
+      <div class="head"><h2>Вопросы</h2><span class="mono">частые</span></div>
+      <details><summary>Что нужно от меня для старта?</summary><p>Исходники ссылкой (Яндекс Диск, Google Drive, облако), логотип и шрифты, если есть фирменный стиль. Если стиля нет, предложу свой вариант.</p></details>
+      <details><summary>Можно сначала тестовое бесплатно?</summary><p>Нет, тестовых не делаю. Посмотрите работы, а на созвоне я расскажу, что сделаю именно с вашей записью.</p></details>
+      <details><summary>Сколько правок входит?</summary><p>Два круга правок в каждом проекте. Каждый следующий круг стоит 1 500 ₽. Правки удобнее присылать одним списком с таймкодами.</p></details>
+      <details><summary>Как быстро будет готово?</summary><p>Лекция за 3 дня, подкаст за 5 дней, рилс и обложка за 1–2 дня. Срочно тоже можно, обсудим на созвоне.</p></details>
+      <details><summary>Работаете с зарубежными клиентами?</summary><p>Да. Оплата в валюте и общение на английском возможны.</p></details>
+    </section>
+
+    <section id="brief">
+      <div class="head"><h2>Бриф</h2><span class="mono">4 вопроса · минута</span></div>
+      <p class="cap" style="margin-bottom:18px">Бриф уйдёт мне в Telegram, отвечу в течение дня.</p>
+      <div class="case">
+        <div class="top">
+          <div><div class="k">Готовность брифа</div><div class="v tnum" id="pv">0%</div><div class="prog"><i id="pb"></i></div></div>
+          <div><div class="k">Контакт</div><div class="v" id="s1">—</div></div>
+          <div><div class="k">Задача</div><div class="v" id="s2">—</div></div>
+          <div><div class="k">Срок</div><div class="v" id="s3">—</div></div>
+        </div>
+        <form id="form" novalidate>
+          <div class="fld"><label for="f-name">Как вас зовут и ваш Telegram</label><input type="text" id="f-name" autocomplete="name" placeholder="Анна, @anna"></div>
+          <fieldset class="fld"><legend>Что нужно</legend>
+            <div class="chips">
+              <label><input type="checkbox" id="n1" name="need" value="Подкаст"><span>Подкаст</span></label>
+              <label><input type="checkbox" id="n2" name="need" value="Лекции"><span>Лекции</span></label>
+              <label><input type="checkbox" id="n3" name="need" value="Рилсы"><span>Рилсы</span></label>
+              <label><input type="checkbox" id="n4" name="need" value="Обложки и постеры"><span>Обложки и постеры</span></label>
+              <label><input type="checkbox" id="n5" name="need" value="Всё вместе"><span>Всё вместе</span></label>
+            </div>
+          </fieldset>
+          <div class="f2">
+            <div class="fld"><label for="f-link">Ссылка на канал или пример записи</label><input type="text" id="f-link" placeholder="можно оставить пустым"></div>
+            <div class="fld"><label for="f-when">Когда нужен первый результат</label><input type="text" id="f-when" placeholder="к 15 ноября"></div>
+          </div>
+          <label class="agree"><input type="checkbox" id="f-agree"><span>Согласен на обработку персональных данных по <button type="button" class="linkbtn" id="open-policy">политике конфиденциальности</button></span></label>
+          <p class="err" id="err" role="alert" hidden></p>
+          <div><button class="btn" type="submit">Отправить бриф в Telegram →</button></div>
+        </form>
+        <div class="out" id="out" hidden>
+          <p><b>Бриф готов и скопирован.</b> Откройте Telegram и вставьте его в чат с @JPEGODD.</p>
+          <pre id="out-text"></pre>
+          <div><a class="btn" href="https://t.me/JPEGODD" target="_blank" rel="noopener">Открыть Telegram ↗</a></div>
+        </div>
+      </div>
+      <div class="contacts">
+        <a class="tag" href="https://t.me/JPEGODD" target="_blank" rel="noopener">Telegram @JPEGODD ↗</a>
+        <a class="tag" href="https://t.me/JPEG0DD" target="_blank" rel="noopener">Канал t.me/JPEG0DD ↗</a>
+        <a class="tag" href="https://instagram.com/leeqbez" target="_blank" rel="noopener">Instagram @leeqbez ↗</a>
+      </div>
+    </section>
+  </main>
+</div>
+
+<footer>
+  <div class="gut">
+    <p class="big"><a href="https://t.me/JPEGODD" target="_blank" rel="noopener">Напишите<br>мне ↗</a></p>
+    <div class="fine mono"><span>© 2026 ИП Гладышков Владимир · монтаж и дизайн</span><span><a href="https://t.me/JPEG0DD" target="_blank" rel="noopener">Telegram-канал</a> · <a href="https://instagram.com/leeqbez" target="_blank" rel="noopener">Instagram</a></span></div>
+  </div>
+</footer>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Постер крупно" tabindex="-1" hidden><img alt=""><video controls playsinline loop hidden></video><span class="mono">нажмите вокруг, чтобы закрыть</span></div>
+
+<div class="modal" id="policy" role="dialog" aria-modal="true" aria-labelledby="pol-h" hidden>
+  <div class="box">
+    <h3 id="pol-h">Политика конфиденциальности</h3>
+    <p>Через этот сайт я получаю только то, что вы сами пишете в брифе: имя, контакт в Telegram, описание задачи и ссылки. Эти данные нужны, чтобы ответить вам и обсудить проект.</p>
+    <p>Я не передаю их третьим лицам и не использую для рассылок. Чтобы удалить ваши данные, напишите мне в Telegram @JPEGODD.</p>
+    <p>Оператор данных: ИП Гладышков Владимир, ИНН [заполнить].</p>
+    <button class="btn" type="button" id="close-policy">Понятно</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  var DPR=Math.min(window.devicePixelRatio||1,1.5);
+
+  (function(){
+    var c=document.createElement('canvas'); c.width=c.height=180; var x=c.getContext('2d'), d=x.createImageData(180,180);
+    for(var i=0;i<d.data.length;i+=4){var v=Math.random()*255|0;d.data[i]=d.data[i+1]=d.data[i+2]=v;d.data[i+3]=255}
+    x.putImageData(d,0,0); document.querySelector('.grain').style.backgroundImage='url('+c.toDataURL()+')';
+  })();
+
+  function rnd(s){ var x=Math.sin(s*127.1)*43758.5453; return x-Math.floor(x); }
+  function blob(c,x,y,r,col,a){ var g=c.createRadialGradient(x,y,0,x,y,r); g.addColorStop(0,col.replace('A',a)); g.addColorStop(1,col.replace('A',0)); c.fillStyle=g; c.fillRect(x-r,y-r,r*2,r*2); }
+
+  // кадры-заглушки, пока нет настоящих работ
+  var SCENES={
+    water:function(c,w,h,t,s){
+      var g=c.createLinearGradient(0,0,0,h); g.addColorStop(0,'#04202b'); g.addColorStop(.55,'#0b6f86'); g.addColorStop(1,'#29d0e6'); c.fillStyle=g; c.fillRect(0,0,w,h);
+      c.lineWidth=Math.max(2,h/70);
+      for(var i=0;i<16;i++){ c.strokeStyle='rgba(220,255,255,'+(0.08+0.18*rnd(i+s))+')'; c.beginPath();
+        for(var x=0;x<=w;x+=w/24){ var y=h*(i/15)+Math.sin(x/w*7+t*1.3+i*.9)*h*.025; x?c.lineTo(x,y):c.moveTo(x,y);} c.stroke(); }
+      blob(c,w*.35,h*.45,h*.55,'rgba(255,240,250,A)',.35);
+    },
+    road:function(c,w,h,t,s){
+      var g=c.createLinearGradient(0,0,0,h); g.addColorStop(0,'#05070a'); g.addColorStop(.46,'#141a22'); g.addColorStop(.47,'#0c0d10'); g.addColorStop(1,'#1d1f24'); c.fillStyle=g; c.fillRect(0,0,w,h);
+      var hy=h*.47, cx=w*.5;
+      c.fillStyle='#22252b'; c.beginPath(); c.moveTo(cx-w*.02,hy); c.lineTo(cx+w*.02,hy); c.lineTo(w*.95,h); c.lineTo(w*.05,h); c.fill();
+      c.fillStyle='rgba(240,240,230,.75)';
+      for(var k=0;k<7;k++){ var z=(k/7+.05)%1, z2=Math.min(1,z+.06), y1=hy+(h-hy)*z*z, y2=hy+(h-hy)*z2*z2, a=w*.003+w*.012*z, b=w*.003+w*.012*z2;
+        c.beginPath(); c.moveTo(cx-a,y1); c.lineTo(cx+a,y1); c.lineTo(cx+b,y2); c.lineTo(cx-b,y2); c.fill(); }
+      var sp=w*.06, r=h*.16, yy=hy+(h-hy)*.25;
+      blob(c,cx-sp,yy,r,'rgba(200,225,255,A)',.95); blob(c,cx+sp,yy,r,'rgba(200,225,255,A)',.95);
+      blob(c,w*.8,hy-h*.03,h*.06,'rgba(255,60,40,A)',.8);
+    },
+    field:function(c,w,h,t,s){
+      var g=c.createLinearGradient(0,0,0,h*.62); g.addColorStop(0,'#cfc6a0'); g.addColorStop(1,'#a8a47e'); c.fillStyle=g; c.fillRect(0,0,w,h*.62);
+      for(var i=0;i<6;i++) blob(c,rnd(i+s)*w,h*(.08+.3*rnd(i*3+s)),h*.28,'rgba(245,240,220,A)',.45);
+      var f=c.createLinearGradient(0,h*.62,0,h); f.addColorStop(0,'#9f8a32'); f.addColorStop(1,'#c3a53a'); c.fillStyle=f; c.fillRect(0,h*.62,w,h*.38);
+      c.fillStyle='#2b3518'; c.beginPath(); c.ellipse(w*.12,h*.62,w*.1,h*.05,0,Math.PI,0); c.fill();
+      c.fillStyle='#f4efe6'; c.fillRect(w*.5,h*.6,Math.max(2,w*.006),h*.035); c.fillStyle='#c4262b'; c.fillRect(w*.504,h*.615,Math.max(2,w*.005),h*.012);
+    },
+    neon:function(c,w,h,t,s){
+      c.fillStyle='#07060b'; c.fillRect(0,0,w,h);
+      var cols=['rgba(255,61,127,A)','rgba(61,140,255,A)','rgba(120,230,255,A)','rgba(255,138,61,A)'];
+      c.globalCompositeOperation='lighter';
+      for(var i=0;i<22;i++) blob(c,rnd(i+s*9)*w,rnd(i*7+s)*h,Math.min(w,h)*(.05+.14*rnd(i*5+s)),cols[i%4],.5);
+      c.globalCompositeOperation='source-over';
+    },
+    studio:function(c,w,h,t,s){
+      var g=c.createLinearGradient(0,0,w,h); g.addColorStop(0,'#1a0f08'); g.addColorStop(1,'#050403'); c.fillStyle=g; c.fillRect(0,0,w,h);
+      blob(c,w*.25,h*.3,h*.6,'rgba(255,160,70,A)',.5); blob(c,w*.8,h*.25,h*.45,'rgba(90,130,255,A)',.35);
+      c.fillStyle='#030303'; var mx=w*.55, my=h*.42, mr=h*.11;
+      c.beginPath(); if(c.roundRect) c.roundRect(mx-mr*.6,my-mr*1.4,mr*1.2,mr*2.2,mr*.6); else c.rect(mx-mr*.6,my-mr*1.4,mr*1.2,mr*2.2); c.fill();
+      c.fillRect(mx-mr*.08,my+mr*.8,mr*.16,h); c.lineWidth=mr*.12; c.strokeStyle='#030303'; c.beginPath(); c.arc(mx,my,mr*.9,0,Math.PI); c.stroke();
+      c.fillStyle='rgba(47,85,255,.95)'; c.fillRect(w*.08,h*.82,w*.36,h*.06); c.fillStyle='rgba(255,255,255,.85)'; c.fillRect(w*.08,h*.9,w*.22,h*.035);
+    }
+  };
+
+  var tmp=document.createElement('canvas'), tx=tmp.getContext('2d');
+  // статичный кадр: пиксельный в покое, чёткий при наведении
+  function frame(host,scene,seed,baseBlock,media){
+    var cv=document.createElement('canvas'); cv.setAttribute('aria-hidden','true'); host.insertBefore(cv,host.firstChild);
+    var off=document.createElement('canvas'), ox=off.getContext('2d'), x=cv.getContext('2d'), block=baseBlock, tgt=baseBlock, timer=null;
+    function fill(){
+      if(!media){ SCENES[scene](ox,off.width,off.height,seed*3,seed); return true; }
+      var src=(media.tagName==='VIDEO' && media.readyState<2 && media._poster) ? media._poster : media;
+      var mw=src.videoWidth||src.naturalWidth, mh=src.videoHeight||src.naturalHeight; if(!mw) return false;
+      var k=Math.max(off.width/mw,off.height/mh), w=off.width/k, h=off.height/k;
+      ox.drawImage(src,(mw-w)/2,(mh-h)/2,w,h,0,0,off.width,off.height); return true;
+    }
+    function draw(){
+      var r=cv.getBoundingClientRect(); if(!r.width) return;
+      cv.width=Math.round(r.width*DPR); cv.height=Math.round(r.height*DPR);
+      off.width=media?Math.round(Math.min(720,r.width*DPR)):360; off.height=Math.max(1,Math.round(off.width*r.height/r.width));
+      if(fill()) paint();
+    }
+    if(media && media.tagName==='IMG'){ if(media.complete) setTimeout(draw); else media.addEventListener('load',draw); media.addEventListener('error',function(){ media=null; draw(); }); }
+    if(media && media.tagName==='VIDEO'){
+      var vis=true; new IntersectionObserver(function(es){vis=es[0].isIntersecting; if(vis) media.play().catch(function(){}); else media.pause();}).observe(host);
+      if(media._poster) media._poster.addEventListener('load',function(){ if(media.readyState<2) draw(); });
+      (function loop(){ if(vis && media.readyState>=2 && fill()) paint(); requestAnimationFrame(loop); })();
+    }
+    function paint(){
+      if(block<=1){ x.imageSmoothingEnabled=true; x.drawImage(off,0,0,cv.width,cv.height); return; }
+      var w=Math.max(1,Math.round(cv.width/(block*DPR))), h=Math.max(1,Math.round(cv.height/(block*DPR)));
+      tmp.width=w; tmp.height=h; tx.imageSmoothingEnabled=true; tx.drawImage(off,0,0,w,h);
+      x.imageSmoothingEnabled=false; x.drawImage(tmp,0,0,w,h,0,0,cv.width,cv.height);
+    }
+    function go(n){ tgt=n; if(timer) return; timer=setInterval(function(){ if(block===tgt){clearInterval(timer);timer=null;return;} block+=block<tgt?1:-1; paint(); },30); }
+    host.addEventListener('pointerenter',function(){go(1)}); host.addEventListener('pointerleave',function(){go(baseBlock)});
+    draw(); addEventListener('resize',draw);
+    return {set:function(n){block=tgt=n;paint()}};
+  }
+
+  // коллаж в шапке
+  document.querySelectorAll('.scrap.ph').forEach(function(s){
+    var m=null;
+    if(s.dataset.video){ m=document.createElement('video'); m.muted=true; m.loop=true; m.playsInline=true; m.autoplay=true; m.preload='auto'; m.src=s.dataset.src; m._poster=new Image(); m._poster.src=s.dataset.poster; var pr=m.play(); if(pr&&pr.catch) pr.catch(function(){}); }
+    else if(s.dataset.src){ m=new Image(); m.src=s.dataset.src; }
+    frame(s.querySelector('.cv'),s.dataset.scene||'neon',+(s.dataset.seed||1),9,m);
+  });
+  var reel=document.querySelector('.reel'); frame(reel,reel.dataset.scene,1,16);
+
+  var hero=document.querySelector('.hero'), z=20;
+  document.querySelectorAll('.scrap').forEach(function(s){
+    var sx,sy,ox,oy,id=null;
+    s.addEventListener('pointerdown',function(e){
+      var hr=hero.getBoundingClientRect();
+      ox=s.offsetLeft; oy=s.offsetTop; sx=e.clientX; sy=e.clientY; id=e.pointerId;
+      s.setPointerCapture(id); s.classList.add('drag'); s.style.zIndex=++z;
+    });
+    s.addEventListener('pointermove',function(e){
+      if(e.pointerId!==id) return;
+      var nx=ox+e.clientX-sx, ny=oy+e.clientY-sy, W=hero.clientWidth, H=hero.clientHeight;
+      nx=Math.max(-s.offsetWidth*.4,Math.min(W-s.offsetWidth*.6,nx)); ny=Math.max(40,Math.min(H-s.offsetHeight*.5,ny));
+      s.style.left=nx+'px'; s.style.top=ny+'px';
+    });
+    function up(){ if(id===null) return; s.classList.remove('drag'); id=null; }
+    s.addEventListener('pointerup',up); s.addEventListener('pointercancel',up);
+  });
+
+  // отзывы: вкладки
+  (function(){
+    var tabs=[].slice.call(document.querySelectorAll('.rtabs [role=tab]'));
+    function sel(t){ tabs.forEach(function(b){ var on=b===t; b.setAttribute('aria-selected',on); b.tabIndex=on?0:-1; document.getElementById(b.getAttribute('aria-controls')).hidden=!on; }); }
+    tabs.forEach(function(b,i){ b.addEventListener('click',function(){sel(b)}); b.addEventListener('keydown',function(e){ if(e.key==='ArrowRight'||e.key==='ArrowLeft'){ var n=tabs[(i+(e.key==='ArrowRight'?1:tabs.length-1))%tabs.length]; sel(n); n.focus(); } }); });
+  })();
+
+  // штрихкод из ника
+  (function(){
+    var b=document.getElementById('bar'), r=b.getBoundingClientRect(), x=b.getContext('2d'); b.width=Math.round(r.width*DPR); b.height=Math.round(r.height*DPR);
+    x.fillStyle='#111114'; var s='JPEGODD-MONTAZH-DIZAIN-2026', px=0, u=b.width/150;
+    for(var i=0;px<b.width;i++){ var k=s.charCodeAt(i%s.length)+i, bw=(1+k%3)*u, gap=(1+(k>>2)%2)*u; x.fillRect(px,0,bw,b.height); px+=bw+gap; }
+  })();
+
+  // стиралка: серебряный слой на фото
+  function initScratch(){
+    var c=document.querySelector('.card .scratch'); if(!c) return;
+    var x=c.getContext('2d'), r=c.getBoundingClientRect(), W=c.width=Math.round(r.width*DPR), H=c.height=Math.round(r.height*DPR);
+    var g=x.createLinearGradient(0,0,W,H); g.addColorStop(0,'#e3e5e8'); g.addColorStop(.35,'#a9adb3'); g.addColorStop(.55,'#eef0f2'); g.addColorStop(.8,'#8f949a'); g.addColorStop(1,'#d5d8dc');
+    x.fillStyle=g; x.fillRect(0,0,W,H);
+    for(var i=0;i<W*H/60;i++){ x.fillStyle='rgba('+(Math.random()<.5?'255,255,255':'60,64,70')+','+(Math.random()*.18).toFixed(2)+')'; x.fillRect(Math.random()*W,Math.random()*H,1.5*DPR,1.5*DPR); }
+    x.fillStyle='rgba(70,74,80,.18)'; x.font='800 '+Math.round(11*DPR)+'px "IBM Plex Mono",monospace';
+    for(var yy=14*DPR;yy<H;yy+=22*DPR) for(var xx=(yy/22%2)*30*DPR-20*DPR;xx<W;xx+=78*DPR) x.fillText('JPEGODD',xx,yy);
+    x.fillStyle='#4a4e55'; x.textAlign='center'; x.font='900 '+Math.round(30*DPR)+'px "Fira Sans Extra Condensed",sans-serif';
+    x.fillText('СОТРИТЕ',W/2,H/2-4*DPR); x.fillText('МОНЕТКОЙ',W/2,H/2+26*DPR);
+    x.font='500 '+Math.round(10*DPR)+'px "IBM Plex Mono",monospace'; x.fillText('ПОД СЛОЕМ: МОНТАЖЁР',W/2,H/2+48*DPR);
+    var down=false, lx=0, ly=0, done=false;
+    function pt(e){ var b=c.getBoundingClientRect(); return [(e.clientX-b.left)*W/b.width,(e.clientY-b.top)*H/b.height]; }
+    function line(a,b){ x.globalCompositeOperation='destination-out'; x.lineCap='round'; x.lineWidth=32*DPR; x.beginPath(); x.moveTo(lx,ly); x.lineTo(a,b); x.stroke(); lx=a; ly=b; }
+    function reveal(){ if(done) return; done=true; c.style.opacity=0; var sh=c.parentNode.querySelector('.shine'); if(sh) sh.classList.add('go'); setTimeout(function(){c.hidden=true},650); }
+    function check(){ var d=x.getImageData(0,0,W,H).data, n=0, t=0; for(var i=3;i<d.length;i+=64){ t++; if(d[i]<40) n++; } if(n/t>.5) reveal(); }
+    c.addEventListener('pointerdown',function(e){ down=true; c.setPointerCapture(e.pointerId); var p=pt(e); lx=p[0]; ly=p[1]; line(p[0]+.1,p[1]); });
+    c.addEventListener('pointermove',function(e){ if(!down) return; var p=pt(e); line(p[0],p[1]); });
+    function up(){ if(!down) return; down=false; check(); }
+    c.addEventListener('pointerup',up); c.addEventListener('pointercancel',up);
+    c.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); reveal(); } });
+  }
+  if(document.fonts && document.fonts.load){ Promise.all([document.fonts.load('900 30px "Fira Sans Extra Condensed"'),document.fonts.load('500 10px "IBM Plex Mono"')]).then(initScratch,initScratch); } else initScratch();
+
+  // папки
+  var FOLDERS={
+    reels:{name:'Рилсы',ar:'9/16',ext:'mp4',scene:['neon','water','studio','road','field','neon'],files:['reel_01','reel_02','reel_03','reel_04','reel_05','reel_06']},
+    pods:{name:'Подкасты',ar:'16/9',ext:'mp4',scene:['studio','studio','road','water'],files:['выпуск_01','выпуск_02','выпуск_03','выпуск_04']},
+    posters:{name:'Постеры',ar:'1060/1500',ext:'png',scene:['field','neon','water','road'],files:['кофефон_01.10','отбери_наш_хлеб_02.10','музеефикация','постер_04'],caps:['POSTOBER 2026','POSTOBER 2026','афиша лекции'],
+      imgs:['media/poster-1.jpg','media/poster-2.jpg','media/poster-3.jpg'],alts:['Постер «Кофефон»: хромированная чашка кофе с улыбкой и сигаретой, POSTOBER 2026','Постер «Отбери наш хлеб»: три хлебных лица в красных кругах, POSTOBER 2026','Афиша «Музеефикация»: двое мужчин смотрят на банан в музейной витрине, 24.10 18:00']},
+    collage:{name:'Обложки',ar:'1/1',ext:'jpg',scene:['field'],files:["неуверенность", "пешком_до_нептуна", "никаких_филок", "по-собачьи", "mindtrail", "just_have_to_ask", "over_nover"],caps:["обложка", "обложка", "обложка", "обложка", "обложка", "обложка", "обложка"],
+      imgs:["media/cover-neuverennost.jpg", "media/cover-peshkom-do-neptuna.jpg", "media/cover-nikakih-filok.jpg", "media/cover-po-sobachyi.jpg", "media/cover-mindtrail.jpg", "media/cover-just-have-to-ask.jpg", "media/cover-over-nover.jpg"],alts:["Обложка «Неуверенность»: парень в белой рубашке на фоне синего текста", "Обложка «Пешком до Нептуна»: пластилиновый человечек с сигаретой", "Обложка «Никаких филок»: панельки и неоновый капюшон", "Обложка «По-собачьи»: рыжая собака и красный текст", "Обложка Mindtrail, Hypnolake: мозг в космосе", "Обложка Just have to ask, Дух помоек", "Обложка Over Nover: чёрно-белая сетка-комната"]},
+    ai:{name:'AI',ar:'4/5',ext:'mp4',scene:['neon'],files:['даскал_сорокин','даскал_сорокин_2','ящерица','упёртый_гусь','mood'],caps:['AI-ролик','AI-ролик','AI-рилс','AI-рилс','AI-настроение'],
+      vids:[{src:'media/ai-ds.mp4',poster:'media/ai-ds.jpg'},{src:'media/ai-ds2.mp4',poster:'media/ai-ds2.jpg'},{src:'media/ai-02.mp4',poster:'media/ai-02.jpg'},{src:'media/ai-gus.mp4',poster:'media/ai-gus.jpg'},{src:'media/ai-mood.mp4',poster:'media/ai-mood.jpg'}],
+      alts:['AI-ролик «Даскал Сорокин»','AI-ролик «Даскал Сорокин», часть 2','AI-рилс с ящерицей и учёными','AI-рилс «Упёртый гусь» в космосе','AI-ролик mood: тёмная комната']}
+  };
+  var lb=document.getElementById('lb'), lbImg=lb.querySelector('img'), lbVid=lb.querySelector('video');
+  function lbClose(){ lb.hidden=true; lbVid.pause(); }
+  lb.addEventListener('click',function(e){ if(e.target!==lbVid) lbClose(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') lbClose(); });
+  var win=document.getElementById('win'), files=document.getElementById('files'), path=document.getElementById('win-path'), btns=document.querySelectorAll('.fold');
+  function open(key,btn){
+    var f=FOLDERS[key]; btns.forEach(function(b){b.setAttribute('aria-expanded',b===btn?'true':'false')});
+    path.textContent='~/JPEGODD/'+f.name; files.innerHTML=''; win.hidden=false;
+    f.files.forEach(function(n,i){
+      var el=document.createElement('div'); el.className='file'; el.style.setProperty('--ar',f.ar);
+      if(f.vids && f.vids[i]){
+        el.innerHTML='<button type="button" class="th zoom vid" aria-label="Смотреть: '+f.alts[i]+'"><img alt="" src="'+f.vids[i].poster+'"></button><div class="fn">'+n+'.'+f.ext+' · <span>'+f.caps[i]+'</span></div>';
+        el.querySelector('.zoom').addEventListener('click',(function(v,alt){ return function(){ lbImg.hidden=true; lbVid.hidden=false; lbVid.src=v.src; lbVid.setAttribute('aria-label',alt); lb.hidden=false; lb.focus(); var pr=lbVid.play(); if(pr&&pr.catch) pr.catch(function(){}); }; })(f.vids[i],f.alts[i]));
+        files.appendChild(el); return;
+      }
+      if(f.imgs && f.imgs[i]){
+        el.innerHTML='<button type="button" class="th zoom" aria-label="Открыть крупно: '+f.alts[i]+'"><img alt="" src="'+f.imgs[i]+'"></button><div class="fn">'+n+'.'+f.ext+' · <span>'+f.caps[i]+'</span></div>';
+        el.querySelector('.zoom').addEventListener('click',(function(src,alt){ return function(){ lbVid.hidden=true; lbImg.hidden=false; lbImg.src=src; lbImg.alt=alt; lb.hidden=false; lb.focus(); }; })(f.imgs[i],f.alts[i]));
+        files.appendChild(el); return;
+      }
+      el.innerHTML='<div class="th"></div><div class="fn">'+n+'.'+f.ext+' · <span>скоро</span></div>';
+      files.appendChild(el); frame(el.querySelector('.th'),f.scene[i%f.scene.length],i+3+key.length,10);
+    });
+  }
+  btns.forEach(function(b){ b.addEventListener('click',function(){ if(b.getAttribute('aria-expanded')==='true'){ close(); } else open(b.dataset.f,b); }); });
+  function close(){ win.hidden=true; btns.forEach(function(b){b.setAttribute('aria-expanded','false')}); }
+  document.getElementById('win-close').onclick=close;
+  open('reels',btns[0]);
+
+  // политика
+  var modal=document.getElementById('policy');
+  document.getElementById('open-policy').onclick=function(){modal.hidden=false;document.getElementById('close-policy').focus()};
+  document.getElementById('close-policy').onclick=function(){modal.hidden=true;document.getElementById('open-policy').focus()};
+  modal.addEventListener('click',function(e){if(e.target===modal) modal.hidden=true});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape') modal.hidden=true});
+
+  // бриф
+  var form=document.getElementById('form'), err=document.getElementById('err');
+  function val(id){ return document.getElementById(id).value.trim(); }
+  function status(){
+    var needs=form.querySelectorAll('input[name=need]:checked').length;
+    var parts=[!!val('f-name'),!!needs,!!val('f-link'),!!val('f-when')], n=parts.filter(Boolean).length, p=Math.round(n/4*100);
+    document.getElementById('pv').textContent=p+'%'; document.getElementById('pb').style.width=p+'%';
+    [['s1',parts[0]],['s2',parts[1]],['s3',parts[3]]].forEach(function(a){ var el=document.getElementById(a[0]); el.textContent=a[1]?'✓':'—'; el.classList.toggle('ok',a[1]); });
+  }
+  form.addEventListener('input',status); form.addEventListener('change',status); status();
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var name=document.getElementById('f-name');
+    err.hidden=true; name.removeAttribute('aria-invalid');
+    if(!name.value.trim()){ name.setAttribute('aria-invalid','true'); err.textContent='Напишите имя и Telegram, чтобы я мог ответить.'; err.hidden=false; name.focus(); return; }
+    if(!document.getElementById('f-agree').checked){ err.textContent='Отметьте согласие на обработку данных.'; err.hidden=false; return; }
+    var needs=Array.prototype.map.call(form.querySelectorAll('input[name=need]:checked'),function(i){return i.value}).join(', ')||'—';
+    var text='Бриф с сайта JPEGODD\n'+
+      'Имя и Telegram: '+name.value.trim()+'\n'+
+      'Что нужно: '+needs+'\n'+
+      'Пример записи: '+(val('f-link')||'—')+'\n'+
+      'Срок: '+(val('f-when')||'—');
+    document.getElementById('out-text').textContent=text;
+    document.getElementById('out').hidden=false;
+    function sel(){var r=document.createRange();r.selectNodeContents(document.getElementById('out-text'));var s=getSelection();s.removeAllRanges();s.addRange(r)}
+    try{navigator.clipboard.writeText(text).catch(sel)}catch(x){sel()}
+  });
+})();
+</script>
+
+</body>
+</html>
