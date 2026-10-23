@@ -285,6 +285,9 @@ input[aria-invalid=true]{border-color:var(--acc-t)}
 .err{color:var(--acc-t);font-size:14px}
 .btn.sent{background:var(--acc);border-color:var(--acc);color:var(--on-acc);pointer-events:none}
 #form.sealed>*:not(.env-wrap):not(.btn-row){display:none}
+#form>*{transition:opacity .2s ease,transform .2s ease}
+#form.fading>*:not(.btn-row){opacity:0;transform:translateY(-10px) scale(.98)}
+.btn{transition:background-color .25s,color .25s,border-color .25s,transform .15s,box-shadow .15s}
 .env-wrap{display:grid;justify-items:center;gap:14px;padding:46px 0 10px}
 .env{position:relative;width:min(400px,88%);aspect-ratio:16/10;perspective:1000px}
 .env .back{position:absolute;inset:0;background:#cfccc2}
@@ -296,13 +299,13 @@ input[aria-invalid=true]{border-color:var(--acc-t)}
 .env .stamp{position:absolute;z-index:5;right:6%;bottom:10%;width:84px;height:84px;border-radius:50%;background:var(--acc);color:var(--on-acc);display:grid;place-items:center;text-align:center;font-family:var(--f-disp);font-weight:800;font-size:14px;line-height:1;text-transform:uppercase;transform:rotate(-14deg);outline:2px dashed var(--on-acc);outline-offset:-7px}
 .env-wrap p{margin:0;color:var(--soft);font-size:15px;text-align:center}
 @media (prefers-reduced-motion:no-preference){
-  .env{animation:envIn .45s cubic-bezier(.2,.8,.2,1) both}
-  .env .letter{animation:letterIn .8s .25s cubic-bezier(.5,0,.2,1) both}
-  .env .flap{animation:flapShut .6s 1.05s cubic-bezier(.5,0,.3,1) both}
-  .env .stamp{animation:stampIn .35s 1.7s cubic-bezier(.3,1.6,.5,1) both}
-  .env-wrap p{animation:envIn .4s 2s both}
-  .env-wrap{animation:wrapShrink .5s 1.65s cubic-bezier(.4,0,.2,1) both}
-  .env.go{animation:envIn .45s cubic-bezier(.2,.8,.2,1) both,envOut .5s 2.4s cubic-bezier(.4,0,.2,1) both}
+  .env{animation:envIn .4s cubic-bezier(.2,.8,.2,1) both}
+  .env .letter{animation:letterIn .9s .1s cubic-bezier(.33,0,.15,1) both}
+  .env .flap{animation:flapShut .65s .9s cubic-bezier(.45,0,.25,1) both}
+  .env .stamp{animation:stampIn .4s 1.5s cubic-bezier(.3,1.5,.5,1) both}
+  .env-wrap p{animation:envIn .4s 1.8s both}
+  .env-wrap{animation:wrapShrink .6s 1.5s cubic-bezier(.4,0,.2,1) both}
+  .env.go{animation:envIn .4s cubic-bezier(.2,.8,.2,1) both,envOut .6s 2.1s cubic-bezier(.4,0,.2,1) both}
 }
 @keyframes envIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
 @keyframes letterIn{from{transform:translateY(-118%) rotate(-3deg)}to{transform:none}}
@@ -790,6 +793,14 @@ function JPT(ru,en){ return JPLANG==="en"?en:ru; }
       try{navigator.clipboard.writeText(text).catch(sel)}catch(x){sel()}
     }
     if(!BRIEF_URL){ manual(); return; }
+    var reduce=window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function fail(){
+      btn.textContent=JPT('Отправьте вручную ↓','Send it manually ↓'); btn.classList.remove('sent');
+      setTimeout(function(){ var w=form.querySelector('.env-wrap'); if(!w) return;
+        w.querySelector('p').textContent=JPT('Связь подвела: бриф скопирован, отправьте его мне в Telegram.','Connection failed: the brief is copied, please send it to me on Telegram.');
+        w.querySelector('.stamp').innerHTML=JPT('Не<br>ушло','Not<br>sent'); },reduce?0:260);
+      manual();
+    }
     function seal(t){
       btn.textContent=JPT('Бриф отправлен ✓','Brief sent ✓'); btn.classList.add('sent'); btn.disabled=true;
       var w=document.createElement('div'); w.className='env-wrap';
@@ -800,16 +811,15 @@ function JPT(ru,en){ return JPLANG==="en"?en:ru; }
       w.querySelector('.pocket span').textContent=JPT('Кому: @JPEGODD','To: @JPEGODD');
       w.querySelector('.stamp').innerHTML=JPT('Отправ-<br>лено','Sent<br>✓');
       w.querySelector('p').textContent=JPT('Отвечу вам в течение дня.','I\'ll reply within a day.');
-      setTimeout(function(){ form.insertBefore(w,form.querySelector('.btn-row')); form.classList.add('sealed'); env.classList.add('go'); },350);
+      form.classList.add('fading');
+      setTimeout(function(){ form.insertBefore(w,form.querySelector('.btn-row')); form.classList.remove('fading'); form.classList.add('sealed'); env.classList.add('go'); },reduce?0:200);
     }
-    btn.disabled=true;
-    var done=false, t=setTimeout(function(){ if(!done){ done=true; btn.disabled=false; manual(); } },12000);
+    seal(text);
+    var done=false, t=setTimeout(function(){ if(!done){ done=true; fail(); } },15000);
     fetch(BRIEF_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({text:text,hp:val('f-hp')})})
       .then(function(r){ return r.json(); })
-      .then(function(d){ if(done) return; done=true; clearTimeout(t); btn.disabled=false;
-        if(d && d.ok){ seal(text); }
-        else manual(); })
-      .catch(function(){ if(done) return; done=true; clearTimeout(t); btn.disabled=false; manual(); });
+      .then(function(d){ if(done) return; done=true; clearTimeout(t); if(!(d && d.ok)) fail(); })
+      .catch(function(){ if(done) return; done=true; clearTimeout(t); fail(); });
   });
 })();
 </script>
