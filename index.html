@@ -94,6 +94,8 @@ h1,h2,h3{margin:0;font-weight:800;text-wrap:balance}
 .scrap.ph canvas{display:block;width:100%;height:100%}
 .scrap.ph .cv{position:relative;width:var(--w);aspect-ratio:var(--ar);max-width:100%;overflow:hidden;background:#111}
 .scrap.ph b{position:absolute;left:10px;bottom:5px;font-family:var(--f-mono);font-weight:500;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--on-paper)}
+.scrap.ph b{right:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:700px){.scrap.ph b{font-size:9px;letter-spacing:.02em;left:8px;right:8px;bottom:6px}}
 .scrap.ph .q{position:absolute;right:10px;bottom:5px;font-family:var(--f-mono);font-size:10.5px;color:var(--acc)}
 .scrap .tape{position:absolute;top:-10px;left:50%;width:70px;height:20px;margin-left:-35px;background:rgba(236,234,227,.55);transform:rotate(-4deg)}
 .scrap.strip{background:var(--acc);color:var(--on-acc);padding:10px 12px;width:var(--w);overflow:hidden}
