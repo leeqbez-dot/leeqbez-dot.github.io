@@ -632,13 +632,11 @@ function JPT(ru,en){ return JPLANG==="en"?en:ru; }
       x.imageSmoothingEnabled=false; x.drawImage(tmp,0,0,w,h,0,0,cv.width,cv.height);
     }
     function go(n){ tgt=n; if(timer) return; timer=setInterval(function(){ if(block===tgt){clearInterval(timer);timer=null;return;} block+=block<tgt?1:-1; paint(); },30); }
-    host.addEventListener('pointerenter',function(){go(1)}); host.addEventListener('pointerleave',function(){go(baseBlock)});
+    // мышь: чётко при наведении; палец: чётко у той карточки, которую схватили
+    host.addEventListener('pointerenter',function(e){ if(e.pointerType==='mouse') go(1); });
+    host.addEventListener('pointerleave',function(e){ if(e.pointerType==='mouse') go(baseBlock); });
+    host.addEventListener('pointerdown',function(e){ if(e.pointerType!=='mouse') go(1); });
     draw(); addEventListener('resize',draw);
-    // на телефоне нет наведения: карточка сама «проявляется», когда попадает на экран
-    if(window.matchMedia && !matchMedia('(hover: hover)').matches && 'IntersectionObserver' in window){
-      var io=new IntersectionObserver(function(es){ if(es[0].isIntersecting){ io.disconnect(); setTimeout(function(){ go(1); },500+(seed%5)*250); } },{threshold:.4});
-      io.observe(host);
-    }
     return {set:function(n){block=tgt=n;paint()}};
   }
 
