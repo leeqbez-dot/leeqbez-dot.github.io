@@ -143,7 +143,8 @@ h1,h2,h3{margin:0;font-weight:800;text-wrap:balance}
 .tools{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
 .quote{background:var(--acc);color:var(--on-acc);padding:22px;display:grid;gap:18px;align-content:space-between;transform:rotate(1deg)}
 .quote p{font-family:var(--f-disp);font-weight:900;text-transform:uppercase;font-size:clamp(30px,4vw,56px);line-height:.92}
-.quote p span{color:var(--ink)}
+.quote p span{color:#FF5A36}
+.quote{background:linear-gradient(180deg,rgba(11,11,13,.35),rgba(11,11,13,0) 45%,rgba(11,11,13,.25)),var(--bg,none) center 40%/cover no-repeat,var(--acc)}
 .quote ul{list-style:none;margin:0;padding:0;display:grid;gap:4px}
 @media (max-width:760px){.about,.quote{grid-template-columns:minmax(0,1fr)}}
 
@@ -354,7 +355,7 @@ footer .fine{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
           <p>Люблю момент, когда монтаж, звук, обложка и шрифт складываются в одно целое. Поэтому сам делаю и дизайн, а в свободное время клею бумажные коллажи.</p>
           <div class="tools"><span class="tag">Premiere Pro</span><span class="tag">After Effects</span><span class="tag">Photoshop</span><span class="tag">CapCut</span><span class="tag">AI-инструменты</span></div>
         </div>
-        <div class="quote">
+        <div class="quote" style="--bg:url(media/quote-bg.jpg)">
         <p>Ваш проект — <span>мой проект</span></p>
         <ul>
           <li><span class="tag">Вкус и единый стиль</span></li>
