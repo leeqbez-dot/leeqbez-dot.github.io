@@ -52,10 +52,15 @@ h1,h2,h3{margin:0;font-weight:800;text-wrap:balance}
 .nav .links a:hover,.nav .links a:focus-visible{background:var(--acc);color:var(--on-acc)}
 .nav .brand{font-weight:800}
 .nav .rec{background:var(--ink);color:var(--fg);display:flex;align-items:center;gap:6px}
+.nav .navr{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.nav .lang{border:0;cursor:pointer;background:var(--ink);color:var(--fg);display:flex;gap:5px;align-items:center}
+.nav .lang b{font-weight:500;opacity:.45}
+.nav .lang b.on{opacity:1;color:var(--acc)}
+.nav .lang:hover b,.nav .lang:focus-visible b{opacity:1}
 .nav .rec i{width:8px;height:8px;border-radius:50%;background:var(--acc)}
 @media (prefers-reduced-motion:no-preference){.nav .rec i{animation:blink 1s steps(2) infinite}}
 @keyframes blink{50%{opacity:0}}
-@media (max-width:700px){.nav .rec,.nav .brand{display:none}.nav{justify-content:center}}
+@media (max-width:700px){.nav .rec,.nav .brand{display:none}.nav{justify-content:center}.nav .navr{position:fixed;right:max(10px,env(safe-area-inset-right,0px));bottom:max(12px,env(safe-area-inset-bottom,0px))}.nav .lang{font-size:14px;padding:7px 9px 6px;box-shadow:0 2px 12px rgba(0,0,0,.4)}}
 
 /* герой: стол с коллажем, фон статичный */
 .hero{position:relative;height:clamp(600px,92vh,940px);overflow:hidden;background:
@@ -296,7 +301,7 @@ footer .fine{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
     <a class="tag" href="#faq">Вопросы</a>
     <a class="tag" href="#brief">Бриф</a>
   </div>
-  <span class="tag rec mono" aria-hidden="true"><i></i>REC</span>
+  <div class="navr"><span class="tag rec mono" aria-hidden="true"><i></i>REC</span><button type="button" class="tag lang mono" id="lang" aria-label="Switch language: English or Russian"><b data-l="en">ENG</b><span>/</span><b data-l="ru">RUS</b></button></div>
 </nav>
 
 <header class="hero" id="top">
@@ -490,6 +495,8 @@ footer .fine{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
 </div>
 
 <script>
+var JPLANG=(function(){ var q=/[?&]lang=(en|ru)\b/.exec(location.search); if(q) return q[1]; try{ var v=localStorage.getItem("jp-lang"); if(v==="en"||v==="ru") return v; }catch(e){} return "ru"; })();
+function JPT(ru,en){ return JPLANG==="en"?en:ru; }
 (function(){
   var DPR=Math.min(window.devicePixelRatio||1,1.5);
 
@@ -627,14 +634,18 @@ footer .fine{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
   function initScratch(){
     var c=document.querySelector('.card .scratch'); if(!c) return;
     var x=c.getContext('2d'), r=c.getBoundingClientRect(), W=c.width=Math.round(r.width*DPR), H=c.height=Math.round(r.height*DPR);
+    function paintLayer(){ x.globalCompositeOperation='source-over'; x.textAlign='start';
     var g=x.createLinearGradient(0,0,W,H); g.addColorStop(0,'#e3e5e8'); g.addColorStop(.35,'#a9adb3'); g.addColorStop(.55,'#eef0f2'); g.addColorStop(.8,'#8f949a'); g.addColorStop(1,'#d5d8dc');
     x.fillStyle=g; x.fillRect(0,0,W,H);
     for(var i=0;i<W*H/60;i++){ x.fillStyle='rgba('+(Math.random()<.5?'255,255,255':'60,64,70')+','+(Math.random()*.18).toFixed(2)+')'; x.fillRect(Math.random()*W,Math.random()*H,1.5*DPR,1.5*DPR); }
     x.fillStyle='rgba(70,74,80,.18)'; x.font='800 '+Math.round(11*DPR)+'px "IBM Plex Mono",monospace';
     for(var yy=14*DPR;yy<H;yy+=22*DPR) for(var xx=(yy/22%2)*30*DPR-20*DPR;xx<W;xx+=78*DPR) x.fillText('JPEGODD',xx,yy);
     x.fillStyle='#4a4e55'; x.textAlign='center'; x.font='900 '+Math.round(30*DPR)+'px "Fira Sans Extra Condensed",sans-serif';
-    x.fillText('СОТРИТЕ',W/2,H/2-4*DPR); x.fillText('МОНЕТКОЙ',W/2,H/2+26*DPR);
-    x.font='500 '+Math.round(10*DPR)+'px "IBM Plex Mono",monospace'; x.fillText('ПОД СЛОЕМ: МОНТАЖЁР',W/2,H/2+48*DPR);
+    x.fillText(JPT('СОТРИТЕ','SCRATCH IT'),W/2,H/2-4*DPR); x.fillText(JPT('МОНЕТКОЙ','WITH A COIN'),W/2,H/2+26*DPR);
+    x.font='500 '+Math.round(10*DPR)+'px "IBM Plex Mono",monospace'; x.fillText(JPT('ПОД СЛОЕМ: МОНТАЖЁР','UNDER IT: VIDEO EDITOR'),W/2,H/2+48*DPR);
+    }
+    paintLayer();
+    window.JPScratch=function(){ if(!done) paintLayer(); };
     var down=false, lx=0, ly=0, done=false;
     function pt(e){ var b=c.getBoundingClientRect(); return [(e.clientX-b.left)*W/b.width,(e.clientY-b.top)*H/b.height]; }
     function line(a,b){ x.globalCompositeOperation='destination-out'; x.lineCap='round'; x.lineWidth=32*DPR; x.beginPath(); x.moveTo(lx,ly); x.lineTo(a,b); x.stroke(); lx=a; ly=b; }
@@ -669,22 +680,24 @@ footer .fine{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
   lb.addEventListener('click',function(e){ if(e.target!==lbVid) lbClose(); });
   document.addEventListener('keydown',function(e){ if(e.key==='Escape') lbClose(); });
   var win=document.getElementById('win'), files=document.getElementById('files'), path=document.getElementById('win-path'), btns=document.querySelectorAll('.fold');
+  var FOLDERS_EN={"reels": {"name": "Reels", "files": ["crossreel", "walk_or_run", "alice", "blood_sugar", "who_is_vecna", "askona"], "caps": ["reel", "reel", "reel", "reel", "reel", "reel"], "alts": ["CrossReel reel: a tournament and an athlete on a treadmill", "“Walk or run” reel", "“Alice” reel: a collage of sports shots", "“Blood sugar” reel: a girl with a glucose sensor", "“Who is Vecna in socionics” reel", "Reel for Askona: a guy with a sleep mask and Patrick"]}, "pods": {"name": "Podcasts", "files": ["kotenkov_career_in_DS"], "caps": ["episode excerpt"], "alts": ["Podcast with Igor Kotenkov about a career in Data Science, first two minutes"]}, "posters": {"name": "Posters", "files": ["coffeephone_01.10", "take_our_bread_02.10", "museumification", "poster_04"], "caps": ["POSTOBER 2026", "POSTOBER 2026", "lecture poster"], "alts": ["“Coffeephone” poster: a chrome coffee cup with a smile and a cigarette, POSTOBER 2026", "“Take our bread” poster: three bread faces in red circles, POSTOBER 2026", "“Museumification” poster: two men looking at a banana in a museum case, 24.10 18:00"]}, "collage": {"name": "Covers", "files": ["insecurity", "walking_to_neptune", "no_cash", "doggy_paddle", "mindtrail", "just_have_to_ask", "over_nover"], "caps": ["cover", "cover", "cover", "cover", "cover", "cover", "cover"], "alts": ["“Insecurity” cover: a guy in a white shirt over blue text", "“Walking to Neptune” cover: a clay figure with a cigarette", "“No cash” cover: apartment blocks and a neon hood", "“Doggy paddle” cover: a ginger dog and red text", "Mindtrail, Hypnolake cover: a brain in space", "Just have to ask, Dukh pomoek cover", "Over Nover cover: a black-and-white grid room"]}, "ai": {"name": "AI", "files": ["daskal_sorokin", "daskal_sorokin_2", "lizard", "stubborn_goose", "mood"], "caps": ["AI video", "AI video", "AI reel", "AI reel", "AI mood"], "alts": ["AI video “Daskal Sorokin”", "AI video “Daskal Sorokin”, part 2", "AI reel with a lizard and scientists", "AI reel “Stubborn goose” in space", "AI mood video: a dark room"]}}, curKey=null;
   function open(key,btn){
-    var f=FOLDERS[key]; btns.forEach(function(b){b.setAttribute('aria-expanded',b===btn?'true':'false')});
+    var f=FOLDERS[key]; curKey=key;
+    if(JPLANG==='en'){ f=Object.assign({},f,FOLDERS_EN[key]); } btns.forEach(function(b){b.setAttribute('aria-expanded',b===btn?'true':'false')});
     path.textContent='~/JPEGODD/'+f.name; files.innerHTML=''; win.hidden=false;
     f.files.forEach(function(n,i){
       var el=document.createElement('div'); el.className='file'; el.style.setProperty('--ar',f.ar);
       if(f.vids && f.vids[i]){
-        el.innerHTML='<button type="button" class="th zoom vid" aria-label="Смотреть: '+f.alts[i]+'"><img alt="" src="'+f.vids[i].poster+'"></button><div class="fn">'+n+'.'+f.ext+' · <span>'+f.caps[i]+'</span></div>';
+        el.innerHTML='<button type="button" class="th zoom vid" aria-label="'+JPT('Смотреть: ','Watch: ')+f.alts[i]+'"><img alt="" src="'+f.vids[i].poster+'"></button><div class="fn">'+n+'.'+f.ext+' · <span>'+f.caps[i]+'</span></div>';
         el.querySelector('.zoom').addEventListener('click',(function(v,alt){ return function(){ lbImg.hidden=true; lbVid.hidden=false; lbVid.src=v.src; lbVid.setAttribute('aria-label',alt); lb.hidden=false; lb.focus(); var pr=lbVid.play(); if(pr&&pr.catch) pr.catch(function(){}); }; })(f.vids[i],f.alts[i]));
         files.appendChild(el); return;
       }
       if(f.imgs && f.imgs[i]){
-        el.innerHTML='<button type="button" class="th zoom" aria-label="Открыть крупно: '+f.alts[i]+'"><img alt="" src="'+f.imgs[i]+'"></button><div class="fn">'+n+'.'+f.ext+' · <span>'+f.caps[i]+'</span></div>';
+        el.innerHTML='<button type="button" class="th zoom" aria-label="'+JPT('Открыть крупно: ','Open large: ')+f.alts[i]+'"><img alt="" src="'+f.imgs[i]+'"></button><div class="fn">'+n+'.'+f.ext+' · <span>'+f.caps[i]+'</span></div>';
         el.querySelector('.zoom').addEventListener('click',(function(src,alt){ return function(){ lbVid.hidden=true; lbImg.hidden=false; lbImg.src=src; lbImg.alt=alt; lb.hidden=false; lb.focus(); }; })(f.imgs[i],f.alts[i]));
         files.appendChild(el); return;
       }
-      el.innerHTML='<div class="th"></div><div class="fn">'+n+'.'+f.ext+' · <span>скоро</span></div>';
+      el.innerHTML='<div class="th"></div><div class="fn">'+n+'.'+f.ext+' · <span>'+JPT('скоро','soon')+'</span></div>';
       files.appendChild(el); frame(el.querySelector('.th'),f.scene[i%f.scene.length],i+3+key.length,10);
     });
   }
@@ -692,6 +705,7 @@ footer .fine{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
   function close(){ win.hidden=true; btns.forEach(function(b){b.setAttribute('aria-expanded','false')}); }
   document.getElementById('win-close').onclick=close;
   open('reels',btns[0]);
+  window.JPFolders=function(){ if(!win.hidden && curKey) open(curKey,document.querySelector('.fold[aria-expanded=true]')); };
 
   // политика
   var modal=document.getElementById('policy');
@@ -714,19 +728,60 @@ footer .fine{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
     e.preventDefault();
     var name=document.getElementById('f-name');
     err.hidden=true; name.removeAttribute('aria-invalid');
-    if(!name.value.trim()){ name.setAttribute('aria-invalid','true'); err.textContent='Напишите имя и Telegram, чтобы я мог ответить.'; err.hidden=false; name.focus(); return; }
-    if(!document.getElementById('f-agree').checked){ err.textContent='Отметьте согласие на обработку данных.'; err.hidden=false; return; }
+    if(!name.value.trim()){ name.setAttribute('aria-invalid','true'); err.textContent=JPT('Напишите имя и Telegram, чтобы я мог ответить.','Please add your name and Telegram so I can reply.'); err.hidden=false; name.focus(); return; }
+    if(!document.getElementById('f-agree').checked){ err.textContent=JPT('Отметьте согласие на обработку данных.','Please tick the consent to data processing.'); err.hidden=false; return; }
     var needs=Array.prototype.map.call(form.querySelectorAll('input[name=need]:checked'),function(i){return i.value}).join(', ')||'—';
-    var text='Бриф с сайта JPEGODD\n'+
-      'Имя и Telegram: '+name.value.trim()+'\n'+
-      'Что нужно: '+needs+'\n'+
-      'Пример записи: '+(val('f-link')||'—')+'\n'+
-      'Срок: '+(val('f-when')||'—');
+    var text=JPT('Бриф с сайта JPEGODD','Brief from the JPEGODD website (EN)')+'\n'+
+      JPT('Имя и Telegram: ','Name and Telegram: ')+name.value.trim()+'\n'+
+      JPT('Что нужно: ','What is needed: ')+needs+'\n'+
+      JPT('Пример записи: ','Sample link: ')+(val('f-link')||'—')+'\n'+
+      JPT('Срок: ','Deadline: ')+(val('f-when')||'—');
     document.getElementById('out-text').textContent=text;
     document.getElementById('out').hidden=false;
     function sel(){var r=document.createRange();r.selectNodeContents(document.getElementById('out-text'));var s=getSelection();s.removeAllRanges();s.addRange(r)}
     try{navigator.clipboard.writeText(text).catch(sel)}catch(x){sel()}
   });
+})();
+</script>
+<script>
+(function(){
+  var EN={"Обо мне": "About", "Работы": "Work", "Цены": "Prices", "Отзывы": "Reviews", "Вопросы": "FAQ", "Бриф": "Brief", "Вижу, каким": "I see what", "может быть": "your visuals", "ваш визуал": "could be", "Потаскайте карточки": "Drag the cards around", "наведите, чтобы дожать качество": "hover to boost the quality", "начинаю_заново.png": "starting_over.png", "худею_заново.png": "dieting_again.png", "Этот точно залетит": "This one will go viral", "Креативно": "So creative", "На монтаже поправим": "We'll fix it in post", "сырой исходник": "raw footage", "→ готовый визуал": "→ finished visuals", "Монтаж": "Editing", "Дизайн": "Design", "Владимир": "Vladimir", "Гладышков": "Gladyshkov", "JPEGODD · монтажёр и дизайнер. Москва и удалённо.": "JPEGODD · video editor and designer. Moscow and remote.", "Монтирую": "I edit", "Подкасты": "Podcasts", "Лекции": "Lectures", "Рилсы": "Reels", "Рисую": "I design", "Обложки": "Covers", "Постеры": "Posters", "Коллажи": "Collages", "Опыт работы": "Experience", "6 лет": "6 years", "Работал с": "Worked with", "Блогерами": "Bloggers", "Экспертами": "Experts", "Владимир · JPEGODD": "Vladimir · JPEGODD", "Бриф →": "Brief →", "с 2020 года": "since 2020", "Меня зовут Владимир Гладышков.": "I'm Vladimir Gladyshkov.", "6 лет в монтаже": "6 years in video editing", ", больше 600 готовых видео.": ", over 600 finished videos.", "Работаю с": "I work with", "авторами подкастов, онлайн-школами и экспертами": "podcast hosts, online schools and experts", "Люблю монтаж, и когда все составляющие видео складываются в одно целое. Поэтому сам делаю и дизайн, а в свободное время клею бумажные коллажи.": "I love editing and that moment when every part of a video comes together as one. That's why I do the design myself too, and in my free time I make paper collages.", "AI-инструменты": "AI tools", "Ваш проект —": "Your project —", "мой проект": "my project", "Вкус и единый стиль": "Taste and one consistent style", "Включаюсь в смысл": "I dig into the meaning", "Монтаж и дизайн в одних руках": "Editing and design in one pair of hands", "шоурил и папки": "showreel & folders", "Шоурил 2026": "Showreel 2026", "16:9 · монтаж, цвет, графика": "16:9 · editing, color, graphics", "скоро": "soon", "6 файлов": "6 files", "1 файл": "1 file", "4 файла": "4 files", "7 файлов": "7 files", "5 файлов": "5 files", "Откройте папку, ролики и постеры смотрятся крупно по клику. Где пока пусто, скоро появятся новые работы.": "Open a folder: videos and posters open large on click. Empty spots will get new work soon.", "цена за одну штуку": "price per item", "Лекция": "Lecture", "Паузы и оговорки убираем, «спикер + слайды», заставка, чистый звук.": "Pauses and slips cut, “speaker + slides” layout, intro, clean sound.", "3 дня": "3 days", "от 6 000 ₽": "from 6,000 ₽", "до часа видео": "up to 1 hour of video", "Подкаст": "Podcast", "Монтаж выпуска, звук, цвет, заставка и обложка выпуска.": "Episode edit, sound, color, intro and episode cover.", "5 дней": "5 days", "10–15 тыс ₽": "10–15k ₽", "выпуск до 1,5 часа": "episode up to 1.5 hours", "Рилс": "Reel", "Сценарный монтаж, субтитры, обложка рилса.": "Story-driven edit, subtitles, reel cover.", "1–2 дня": "1–2 days", "от 1 500 ₽": "from 1,500 ₽", "вертикаль 9:16": "vertical 9:16", "Постер или обложка": "Poster or cover", "Обложка выпуска или рилса, постер, коллаж.": "Episode or reel cover, poster, collage.", "одна штука": "one piece", "2 круга правок включены": "2 rounds of revisions included", "следующий круг 1 500 ₽": "each extra round 1,500 ₽", "договор, ИП": "contract, registered business", "предоплата 50%": "50% prepayment", "Точную сумму называю после брифа и до начала работы. Тестовых бесплатно не делаю.": "I quote the exact price after the brief, before work starts. I don't do free test jobs.", "собираю": "collecting", "Видео": "Video", "онлайн-школа · лекции": "online school · lectures", "отзыв скоро": "review coming soon", "Автор подкаста": "Podcast host", "подкаст": "podcast", "Эксперт": "Expert", "рилсы": "reels", "обложки": "covers", "Организатор лекций": "Lecture organizer", "афиша": "event poster", "Блогер": "Blogger", "обложки для видео": "video thumbnails", "частые": "common", "Что нужно от меня для старта?": "What do you need from me to start?", "Исходники ссылкой (Яндекс Диск, Google Drive, облако), логотип и шрифты, если есть фирменный стиль. Если стиля нет, предложу свой вариант.": "Source files via a link (Yandex Disk, Google Drive, any cloud), plus your logo and fonts if you have a brand style. If you don't, I'll suggest one.", "Можно сначала тестовое бесплатно?": "Can I get a free test first?", "Нет, тестовых не делаю. Посмотрите работы, а на созвоне я расскажу, что сделаю именно с вашей записью.": "No, I don't do test jobs. Have a look at my work, and on a call I'll tell you exactly what I'll do with your footage.", "Сколько правок входит?": "How many revisions are included?", "Два круга правок в каждом проекте. Каждый следующий круг стоит 1 500 ₽. Правки удобнее присылать одним списком с таймкодами.": "Two rounds of revisions per project. Each extra round costs 1,500 ₽. It's easiest to send revisions as one list with timecodes.", "Как быстро будет готово?": "How fast will it be ready?", "Лекция за 3 дня, подкаст за 5 дней, рилс и обложка за 1–2 дня. Срочно тоже можно, обсудим на созвоне.": "A lecture in 3 days, a podcast in 5 days, a reel or a cover in 1–2 days. Rush jobs are possible too, we'll discuss on a call.", "Работаете с зарубежными клиентами?": "Do you work with clients abroad?", "Да. Оплата в валюте и общение на английском возможны.": "Yes. Payment in foreign currency and communication in English are both fine.", "4 вопроса · минута": "4 questions · 1 minute", "Бриф уйдёт мне в Telegram, отвечу в течение дня.": "The brief goes to my Telegram, I'll reply within a day.", "Готовность брифа": "Brief progress", "Контакт": "Contact", "Задача": "Task", "Срок": "Deadline", "Как вас зовут и ваш Telegram": "Your name and Telegram", "Что нужно": "What you need", "Обложки и постеры": "Covers & posters", "Всё вместе": "All of it", "Ссылка на канал или пример записи": "Link to your channel or a sample recording", "Когда нужен первый результат": "When do you need the first result", "Согласен на обработку персональных данных по": "I agree to the processing of my personal data under the", "политике конфиденциальности": "privacy policy", "Отправить бриф в Telegram →": "Send the brief via Telegram →", "Бриф готов и скопирован.": "The brief is ready and copied.", "Откройте Telegram и вставьте его в чат с @JPEGODD.": "Open Telegram and paste it into a chat with @JPEGODD.", "Открыть Telegram ↗": "Open Telegram ↗", "Канал t.me/JPEG0DD ↗": "Channel t.me/JPEG0DD ↗", "Напишите": "Write", "мне ↗": "to me ↗", "© 2026 ИП Гладышков Владимир · монтаж и дизайн": "© 2026 Vladimir Gladyshkov, sole proprietor · video editing & design", "Telegram-канал": "Telegram channel", "нажмите вокруг, чтобы закрыть": "click outside to close", "Политика конфиденциальности": "Privacy policy", "Через этот сайт я получаю только то, что вы сами пишете в брифе: имя, контакт в Telegram, описание задачи и ссылки. Эти данные нужны, чтобы ответить вам и обсудить проект.": "Through this site I only receive what you write in the brief yourself: your name, Telegram contact, task description and links. I need this data to reply to you and discuss the project.", "Я не передаю их третьим лицам и не использую для рассылок. Чтобы удалить ваши данные, напишите мне в Telegram @JPEGODD.": "I don't share it with third parties or use it for mailings. To have your data deleted, message me on Telegram @JPEGODD.", "Оператор данных: ИП Гладышков Владимир, ИНН [заполнить].": "Data controller: sole proprietor Vladimir Gladyshkov, tax ID [to be added].", "Понятно": "Got it", "Разделы": "Sections", "Визитка": "Business card", "Владимир Гладышков в наушниках": "Vladimir Gladyshkov wearing headphones", "Серебряный слой на фото. Сотрите его или нажмите Enter": "Silver layer over the photo. Scratch it off or press Enter", "Папки с работами": "Work folders", "Закрыть папку": "Close folder", "Анна, @anna": "Anna, @anna", "можно оставить пустым": "optional", "к 15 ноября": "by November 15", "Постер крупно": "Poster, enlarged", "ПОДКАСТЫ ■ ЛЕКЦИИ ■ РИЛСЫ ■ ОБЛОЖКИ ■ ПОСТЕРЫ ■ КОЛЛАЖИ ■ AI-ПРИКОЛЫ ■ ПОДКАСТЫ ■ ЛЕКЦИИ ■ РИЛСЫ ■ ОБЛОЖКИ ■ ПОСТЕРЫ ■ КОЛЛАЖИ ■ AI-ПРИКОЛЫ ■": "PODCASTS ■ LECTURES ■ REELS ■ COVERS ■ POSTERS ■ COLLAGES ■ AI STUFF ■ PODCASTS ■ LECTURES ■ REELS ■ COVERS ■ POSTERS ■ COLLAGES ■ AI STUFF ■"};
+  var ATTRS=['placeholder','aria-label','alt','value'], RU_TITLE=null;
+  function norm(t){ return t.replace(/\s+/g,' ').trim(); }
+  function apply(lang){
+    var w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode:function(n){ var p=n.parentNode&&n.parentNode.nodeName; return p==='SCRIPT'||p==='STYLE'?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT; }}), n;
+    while((n=w.nextNode())){
+      if(lang==='ru'){ if(n._ru!=null){ n.nodeValue=n._ru; n._ru=null; } continue; }
+      var k=norm(n.nodeValue); if(!k || !EN.hasOwnProperty(k)) continue;
+      var m=/^(\s*)[\s\S]*?(\s*)$/.exec(n.nodeValue); n._ru=n.nodeValue; n.nodeValue=m[1]+EN[k]+m[2];
+    }
+    ATTRS.forEach(function(a){
+      document.querySelectorAll('['+a+']').forEach(function(el){
+        if(a==='value' && el.name!=='need') return;
+        el._ruA=el._ruA||{};
+        if(lang==='ru'){ if(el._ruA[a]!=null){ el.setAttribute(a,el._ruA[a]); if(a==='value') el.value=el._ruA[a]; delete el._ruA[a]; } return; }
+        var v=el.getAttribute(a), k=norm(v||''); if(!EN.hasOwnProperty(k)) return;
+        el._ruA[a]=v; el.setAttribute(a,EN[k]); if(a==='value') el.value=EN[k];
+      });
+    });
+    if(RU_TITLE===null) RU_TITLE=document.title;
+    document.title=lang==='en'?'JPEGODD — video editing & design':RU_TITLE;
+    document.documentElement.lang=lang;
+    document.querySelectorAll('#lang b').forEach(function(b){ b.classList.toggle('on',b.getAttribute('data-l')===lang); });
+  }
+  function set(lang){
+    if(lang===JPLANG) return;
+    if(JPLANG==='en') apply('ru');
+    JPLANG=lang;
+    if(window.JPFolders) window.JPFolders();
+    if(window.JPScratch) window.JPScratch();
+    if(lang==='en') apply('en'); else apply('ru');
+    try{ localStorage.setItem('jp-lang',lang); }catch(e){}
+    try{ var u=new URL(location.href); if(lang==='en') u.searchParams.set('lang','en'); else u.searchParams.delete('lang'); history.replaceState(null,'',u); }catch(e){}
+  }
+  var btn=document.getElementById('lang');
+  btn.addEventListener('click',function(){ set(JPLANG==='en'?'ru':'en'); });
+  apply(JPLANG);
 })();
 </script>
 
